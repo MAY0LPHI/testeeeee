@@ -19,10 +19,10 @@ function getTimestamp() {
 /**
  * Logger colorido para comandos
  */
-export function logCommand(commandName, senderNumber, isGroup) {
+export function logCommand(commandName, senderNumber, isGroup, prefix = '!') {
   const timestamp = chalk.gray(`[${getTimestamp()}]`);
   const type = chalk.bgCyan.black(' COMANDO ');
-  const command = chalk.cyan.bold(`!${commandName}`);
+  const command = chalk.cyan.bold(`${prefix}${commandName}`);
   const from = chalk.yellow(`${senderNumber}`);
   const location = isGroup ? chalk.magenta('(Grupo)') : chalk.blue('(Privado)');
   
@@ -155,11 +155,11 @@ export function logRateLimit(senderNumber, remainingTime) {
 /**
  * Logger colorido para cooldown
  */
-export function logCooldown(senderNumber, commandName, cooldownTime) {
+export function logCooldown(senderNumber, commandName, cooldownTime, prefix = '!') {
   const timestamp = chalk.gray(`[${getTimestamp()}]`);
   const type = chalk.bgYellow.black(' COOLDOWN ');
   const from = chalk.yellow(`${senderNumber}`);
-  const command = chalk.cyan(`!${commandName}`);
+  const command = chalk.cyan(`${prefix}${commandName}`);
   const time = chalk.yellow(`${cooldownTime}s restantes`);
   
   console.log(`${timestamp} ${type} ${from} ${chalk.gray('tentou')} ${command} ${chalk.gray('-')} ${time}`);
@@ -168,11 +168,11 @@ export function logCooldown(senderNumber, commandName, cooldownTime) {
 /**
  * Logger colorido para usuário na blacklist
  */
-export function logBlacklist(senderNumber, commandName) {
+export function logBlacklist(senderNumber, commandName, prefix = '!') {
   const timestamp = chalk.gray(`[${getTimestamp()}]`);
   const type = chalk.bgRed.white(' BLACKLIST ');
   const from = chalk.red.bold(`${senderNumber}`);
-  const command = chalk.cyan(`!${commandName}`);
+  const command = chalk.cyan(`${prefix}${commandName}`);
   
   console.log(`${timestamp} ${type} ${chalk.gray('Usuário bloqueado')} ${from} ${chalk.gray('tentou')} ${command}`);
 }

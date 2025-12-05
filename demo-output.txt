@@ -1,0 +1,41 @@
+===========================================
+HINOKAMI BOT - SISTEMA DE LOGGING COLORIDO
+===========================================
+
+Este é um exemplo de como as mensagens aparecem no terminal:
+
+COMANDOS:
+- Comandos aparecem com fundo CIANO e o nome do comando em azul
+- Mostra o número do remetente e se é de Grupo ou Privado
+- Exemplo: [04:46:09] COMANDO !menu de 5511999887766 (Grupo)
+
+MENSAGENS:
+- Mensagens aparecem com fundo BRANCO
+- Mostra uma prévia do conteúdo (até 50 caracteres)
+- Exemplo: [04:46:09] MENSAGEM de 5511999887766 (Grupo) : "Olá pessoal!"
+
+CONEXÃO:
+- CONECTADO: fundo VERDE quando bot está online
+- CONECTANDO: fundo AMARELO durante reconexão
+- DESCONECTADO: fundo VERMELHO quando perde conexão
+- QR CODE: fundo MAGENTA quando gera QR para autenticação
+
+EVENTOS DE SEGURANÇA:
+- RATE LIMIT: fundo VERMELHO quando usuário excede limite
+- COOLDOWN: fundo AMARELO quando comando em cooldown
+- BLACKLIST: fundo VERMELHO quando usuário bloqueado tenta comando
+
+LOGS DO SISTEMA:
+- INFO: fundo AZUL para informações gerais
+- SUCESSO: fundo VERDE para operações bem-sucedidas
+- AVISO: fundo AMARELO para avisos
+- ERRO: fundo VERMELHO para erros
+- DEBUG: fundo CINZA para depuração
+
+BENEFÍCIOS:
+✓ Visibilidade aprimorada no terminal
+✓ Fácil distinção entre tipos de eventos
+✓ Organização clara com timestamps
+✓ Depuração facilitada com cores
+✓ Monitoramento em tempo real eficiente
+

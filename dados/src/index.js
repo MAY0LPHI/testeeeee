@@ -97,7 +97,7 @@ export async function handleMessage(sock, m) {
 
     // Verificar blacklist global
     if (configDB.isBlacklisted(sender)) {
-      colorLogger.logBlacklist(senderNumber, commandName);
+      colorLogger.logBlacklist(senderNumber, commandName, prefix);
       logger.warn(`Usuário na blacklist tentou usar comando: ${senderNumber}`);
       return;
     }
@@ -117,7 +117,7 @@ export async function handleMessage(sock, m) {
     // Verificar cooldown por usuário/comando
     if (userDB.checkCooldown(sender, commandName)) {
       const cooldownTime = Math.ceil(userDB.getCooldownTime(sender, commandName) / 1000);
-      colorLogger.logCooldown(senderNumber, commandName, cooldownTime);
+      colorLogger.logCooldown(senderNumber, commandName, cooldownTime, prefix);
       await sendMessage(sock, from,
         `⏳ Cooldown ativo para este comando!\n\n` +
         `🕐 Aguarde ${cooldownTime}s.`
@@ -173,7 +173,7 @@ export async function handleMessage(sock, m) {
     };
 
     // Log do comando
-    colorLogger.logCommand(commandName, senderNumber, isGroupMsg);
+    colorLogger.logCommand(commandName, senderNumber, isGroupMsg, prefix);
     logger.info(`Comando: ${commandName} | De: ${senderNumber} | Grupo: ${isGroupMsg}`);
 
     // Processar comando
