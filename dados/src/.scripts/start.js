@@ -104,10 +104,8 @@ async function start() {
     
     logger.info('✅ Bot inicializado com sucesso!');
     
-    // Manter processo vivo
-    setInterval(() => {
-      // Heartbeat
-    }, 30000);
+    // Keep process alive - the bot will run continuously
+    // Heartbeat could be added here for monitoring if needed
     
   } catch (error) {
     logger.error('❌ Erro fatal ao iniciar bot:', error);

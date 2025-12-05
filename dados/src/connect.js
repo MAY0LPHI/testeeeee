@@ -11,6 +11,8 @@ import qrcode from 'qrcode-terminal';
 import fs from 'fs';
 import path from 'path';
 import { paths } from './utils/paths.js';
+// Import JSON config using 'with' syntax (Node.js 20+ feature)
+// See: https://nodejs.org/api/esm.html#import-attributes
 import config from './config.json' with { type: 'json' };
 
 /**

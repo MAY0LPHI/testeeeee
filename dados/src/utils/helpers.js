@@ -126,7 +126,7 @@ export async function downloadFile(url, outputPath = null) {
       responseType: 'arraybuffer',
       timeout: 30000,
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       }
     });
     
@@ -185,9 +185,12 @@ export function sanitizeText(text) {
  * Valida número de telefone
  * @param {string} number - Número para validar
  * @returns {boolean}
+ * Note: Basic validation - for production use, consider libphonenumber-js
  */
 export function isValidPhoneNumber(number) {
   const cleaned = number.replace(/\D/g, '');
+  // Most international numbers are 10-15 digits
+  // For stricter validation, integrate libphonenumber-js library
   return cleaned.length >= 10 && cleaned.length <= 15;
 }
 
