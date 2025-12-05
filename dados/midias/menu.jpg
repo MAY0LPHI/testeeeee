@@ -1,0 +1,14 @@
+PLACEHOLDER IMAGE FILE
+======================
+
+This file represents the menu.jpg image for the Hinokami Bot.
+
+To use a real image:
+1. Replace this file with an actual JPG image
+2. The image should be themed around Tanjiro from Demon Slayer (Kimetsu no Yaiba)
+3. Recommended size: 1080x1080 pixels
+4. Suggested theme: Tanjiro with his sword, fire effects, or the Hinokami Kagura technique
+
+The bot will use this image when sending menu messages to users.
+
+File location: dados/midias/menu.jpg

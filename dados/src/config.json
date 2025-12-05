@@ -1,0 +1,29 @@
+{
+  "botName": "Hinokami Bot 🗡️🔥",
+  "ownerNumber": "55XXXXXXXXXXX",
+  "prefix": "!",
+  "debug": false,
+  "autoRead": true,
+  "autoTyping": false,
+  "liteMode": false,
+  "sessionName": "hinokami_session",
+  "features": {
+    "antiDelete": true,
+    "antiSpam": true,
+    "cooldown": 3,
+    "welcomeMessage": true,
+    "autoSticker": false,
+    "levelSystem": true,
+    "economy": true
+  },
+  "limits": {
+    "maxWarnings": 3,
+    "maxCommandsPerMinute": 10,
+    "messageQueueSize": 100
+  },
+  "theme": {
+    "primaryColor": "🔥",
+    "secondaryColor": "🗡️",
+    "emojis": ["🗡️", "🔥", "🌸", "⛩️", "🪵", "💧", "🌙", "⚔️"]
+  }
+}
