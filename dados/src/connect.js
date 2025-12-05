@@ -11,7 +11,7 @@ import qrcode from 'qrcode-terminal';
 import fs from 'fs';
 import path from 'path';
 import { paths } from './utils/paths.js';
-import config from './config.json' assert { type: 'json' };
+import config from './config.json' with { type: 'json' };
 
 /**
  * Conexão do Hinokami Bot com WhatsApp 🗡️🔥

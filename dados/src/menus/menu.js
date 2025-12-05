@@ -3,7 +3,7 @@
  * Exporta funções construtoras de menus temáticos do Tanjiro
  */
 
-import config from '../config.json' assert { type: 'json' };
+import config from '../config.json' with { type: 'json' };
 
 /**
  * Formata tempo em segundos para string legível

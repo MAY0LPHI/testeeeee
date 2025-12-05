@@ -10,7 +10,7 @@ import {
   sanitizeText
 } from './utils/helpers.js';
 import { groupDB, userDB, configDB } from './utils/database.js';
-import config from './config.json' assert { type: 'json' };
+import config from './config.json' with { type: 'json' };
 import * as menus from './menus/index.js';
 import { commandHandler } from './funcs/exports.js';
 
