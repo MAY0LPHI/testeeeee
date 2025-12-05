@@ -24,6 +24,7 @@
     "update": "node dados/src/.scripts/update.js"
   },
   "dependencies": {
+    "@adiwajshing/keyed-db": "^0.2.4",
     "@hapi/boom": "^10.0.1",
     "axios": "^1.13.2",
     "fluent-ffmpeg": "^2.1.3",

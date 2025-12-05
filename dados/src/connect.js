@@ -1,10 +1,12 @@
-import makeWASocket, {
+import pkg from 'whaileys';
+const {
   DisconnectReason,
   useMultiFileAuthState,
   fetchLatestBaileysVersion,
   makeCacheableSignalKeyStore,
   makeInMemoryStore
-} from 'whaileys';
+} = pkg;
+const makeWASocket = pkg.default;
 import { Boom } from '@hapi/boom';
 import pino from 'pino';
 import qrcode from 'qrcode-terminal';
@@ -30,14 +32,19 @@ if (!fs.existsSync(sessionDir)) {
   fs.mkdirSync(sessionDir, { recursive: true });
 }
 
-// Store para mensagens (cache)
-const store = makeInMemoryStore({ logger });
-store?.readFromFile(path.join(sessionDir, 'store.json'));
-
-// Salvar store periodicamente
-setInterval(() => {
-  store?.writeToFile(path.join(sessionDir, 'store.json'));
-}, 30000); // A cada 30 segundos
+// Store para mensagens (cache) - opcional
+let store = null;
+try {
+  store = makeInMemoryStore({ logger });
+  store?.readFromFile(path.join(sessionDir, 'store.json'));
+  
+  // Salvar store periodicamente
+  setInterval(() => {
+    store?.writeToFile(path.join(sessionDir, 'store.json'));
+  }, 30000); // A cada 30 segundos
+} catch (error) {
+  logger.warn('Store não disponível - continuando sem cache de mensagens');
+}
 
 /**
  * Conecta ao WhatsApp com reconexão automática
@@ -240,6 +247,8 @@ export function clearSession() {
     return false;
   }
 }
+
+export { logger, store };
 
 export default {
   connectToWhatsApp,

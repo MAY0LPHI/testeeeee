@@ -110,7 +110,9 @@ async function start() {
   } catch (error) {
     logger.error('❌ Erro fatal ao iniciar bot:', error);
     console.error('\n💥 Falha ao iniciar o bot!');
-    console.error('   Verifique os logs acima para detalhes.\n');
+    console.error('   Erro:', error.message);
+    console.error('   Stack:', error.stack);
+    console.error('\n   Verifique os logs acima para detalhes.\n');
     process.exit(1);
   }
 }
