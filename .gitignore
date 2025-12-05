@@ -41,5 +41,6 @@ build/
 dados/midias/*
 !dados/midias/menu.jpg
 
-# Test files
+# Test and demo files
 test-*.js
+demo-*.txt
