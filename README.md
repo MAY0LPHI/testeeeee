@@ -40,6 +40,31 @@ Todas as mensagens, menus e interações são temáticas do Tanjiro, incluindo:
 - **Node.js**: 20.0.0 ou superior
 - **NPM**: Instalado com Node.js
 - **WhatsApp**: Conta válida para autenticação
+- **FFmpeg**: Necessário para criação de figurinhas/stickers (veja instruções abaixo)
+
+### Instalando FFmpeg
+
+O FFmpeg é necessário para converter imagens e vídeos em figurinhas.
+
+**Ubuntu/Debian:**
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+**macOS (com Homebrew):**
+```bash
+brew install ffmpeg
+```
+
+**Windows:**
+1. Baixe o FFmpeg em https://ffmpeg.org/download.html
+2. Extraia e adicione ao PATH do sistema
+
+**Verificar instalação:**
+```bash
+ffmpeg -version
+```
 
 ## 🚀 Instalação
 

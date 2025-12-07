@@ -8,6 +8,8 @@
   "autoTyping": false,
   "liteMode": false,
   "sessionName": "hinokami_session",
+  "stickerPack": "Hinokami Bot",
+  "stickerAuthor": "Tanjiro 🗡️🔥",
   "features": {
     "antiDelete": true,
     "antiSpam": true,
