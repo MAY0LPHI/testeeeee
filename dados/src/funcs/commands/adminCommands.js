@@ -2,6 +2,8 @@
  * Additional admin command handlers
  */
 
+import { groupDB } from '../../utils/database.js';
+
 export async function handleNomegp(ctx) {
   const { sock, from, m, args, permissions } = ctx;
   
@@ -157,7 +159,6 @@ export async function handleFotogp(ctx) {
 
 export async function handleBemvindo(ctx) {
   const { from, args } = ctx;
-  const { groupDB } = await import('../../utils/database.js');
   
   const status = args[0];
   

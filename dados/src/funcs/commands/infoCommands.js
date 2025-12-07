@@ -3,6 +3,8 @@
  * Implements informative commands
  */
 
+import config from '../../config.json' with { type: 'json' };
+
 export async function handleAtividade(ctx) {
   const { sock, from, m } = ctx;
   
@@ -125,7 +127,6 @@ export async function handleIdiomas(ctx) {
 
 export async function handleInfodono(ctx) {
   const { sock, from, m } = ctx;
-  const { default: config } = await import('../../config.json', { with: { type: 'json' } });
   
   await sock.sendMessage(from, {
     text: `👑 *INFORMAÇÕES DO DONO*\n\n` +

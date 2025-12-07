@@ -1,11 +1,13 @@
 import { downloadMediaMessage } from 'whaileys';
 import axios from 'axios';
+import fs from 'fs/promises';
 import {
   createImageSticker,
   createVideoSticker,
   stickerToImage,
   isVideoOrGif,
-  STICKER_CONFIG
+  STICKER_CONFIG,
+  getVideoDuration
 } from '../../utils/stickerUtil.js';
 
 /**
@@ -65,12 +67,11 @@ export async function handleSticker(ctx) {
     if (videoMsg) {
       // Check if video is too long
       const tempFile = `/tmp/check_${Date.now()}.mp4`;
-      await import('fs/promises').then(fs => fs.writeFile(tempFile, mediaBuffer));
+      await fs.writeFile(tempFile, mediaBuffer);
       
-      const { getVideoDuration } = await import('../../utils/stickerUtil.js');
       const duration = await getVideoDuration(tempFile).catch(() => 0);
       
-      await import('fs/promises').then(fs => fs.unlink(tempFile).catch(() => {}));
+      await fs.unlink(tempFile).catch(() => {});
       
       if (duration > STICKER_CONFIG.maxVideoSeconds) {
         return await sock.sendMessage(from, {
