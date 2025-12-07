@@ -264,6 +264,40 @@ export async function handleMenuCoins(ctx) {
   await sendMenuReply(ctx, menuText);
 }
 
+/**
+ * Handler for efeitosimg menu
+ */
+export async function handleMenuEfeitosImg(ctx) {
+  const { prefix } = ctx;
+  const sender = ctx.m.key.participant || ctx.m.key.remoteJid;
+  
+  const menuText = allMenus.buildMenuEfeitosImg(
+    sender,
+    prefix,
+    config.botName || 'Hinokami Bot',
+    config.ownerName || 'Owner'
+  );
+  
+  await sendMenuReply(ctx, menuText);
+}
+
+/**
+ * Handler for outros comandos menu
+ */
+export async function handleMenuOutros(ctx) {
+  const { prefix } = ctx;
+  const sender = ctx.m.key.participant || ctx.m.key.remoteJid;
+  
+  const menuText = allMenus.buildMenuOutros(
+    sender,
+    prefix,
+    config.botName || 'Hinokami Bot',
+    config.ownerName || 'Owner'
+  );
+  
+  await sendMenuReply(ctx, menuText);
+}
+
 export default {
   handleMenuPrincipal,
   handleMenuDono,
@@ -276,5 +310,7 @@ export default {
   handleMenuInformativos,
   handleMenuBrincadeiras,
   handleMenuLogos,
-  handleMenuCoins
+  handleMenuCoins,
+  handleMenuEfeitosImg,
+  handleMenuOutros
 };
