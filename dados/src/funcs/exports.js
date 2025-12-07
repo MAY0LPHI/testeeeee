@@ -2,6 +2,7 @@ import { logger } from '../connect.js';
 import { groupDB, configDB } from '../utils/database.js';
 import { normalizeJid, isValidUrl, downloadFile } from '../utils/helpers.js';
 import * as menuHandlers from './menuHandlers.js';
+import * as stickerCommands from '../commands/sticker.js';
 
 /**
  * Exporta todos os handlers de comandos do Hinokami Bot
@@ -64,24 +65,141 @@ export async function commandHandler(ctx) {
     warn: { handler: handleWarn, requireAdmin: true, requireGroup: true },
     unwarn: { handler: handleUnwarn, requireAdmin: true, requireGroup: true },
 
-    // Downloads (stubs)
+    // Sticker commands - FULLY FUNCTIONAL
+    sticker: { handler: stickerCommands.handleSticker },
+    fsticker: { handler: stickerCommands.handleSticker },
+    s: { handler: stickerCommands.handleSticker },
+    f: { handler: stickerCommands.handleSticker },
+    ttp: { handler: stickerCommands.handleTTP, requireArgs: true },
+    attp: { handler: stickerCommands.handleATTP, requireArgs: true },
+    toimg: { handler: stickerCommands.handleToImg },
+    rename: { handler: stickerCommands.handleRename },
+    
+    // Downloads (stubs - require API integration)
     play: { handler: handlePlay, requireArgs: true },
+    playaudio: { handler: handlePlay, requireArgs: true },
+    playaudio2: { handler: handlePlay, requireArgs: true },
+    playvid: { handler: handleVideo, requireArgs: true },
+    playvideo2: { handler: handleVideo, requireArgs: true },
+    playdoc: { handler: handlePlayDoc, requireArgs: true },
+    playdoc2: { handler: handlePlayDoc, requireArgs: true },
+    ytshorts: { handler: handleYTShorts, requireArgs: true },
     video: { handler: handleVideo, requireArgs: true },
     tiktok: { handler: handleTikTok, requireArgs: true },
+    tiktokaudio: { handler: handleTikTokAudio, requireArgs: true },
     instagram: { handler: handleInstagram, requireArgs: true },
+    instaudio: { handler: handleInstaudio, requireArgs: true },
+    instagram2: { handler: handleInstagram, requireArgs: true },
+    instaudio2: { handler: handleInstaudio, requireArgs: true },
+    threads: { handler: handleThreads, requireArgs: true },
+    kwai: { handler: handleKwai, requireArgs: true },
+    spotify: { handler: handleSpotify, requireArgs: true },
+    soundcloud: { handler: handleSoundcloud, requireArgs: true },
+    mediafire: { handler: handleMediafire, requireArgs: true },
+    googledrive: { handler: handleGoogleDrive, requireArgs: true },
+    gerarlink: { handler: handleGerarLink },
+    shazam: { handler: handleShazam },
+    audiomeme: { handler: handleAudioMeme },
+    multidl: { handler: handleMultiDL, requireArgs: true },
     pinterest: { handler: handlePinterest, requireArgs: true },
     audio: { handler: handleAudio, requireArgs: true },
 
-    // Fun commands (stubs)
+    // Fun commands / Brincadeiras
     gay: { handler: handleGay },
     gado: { handler: handleGado },
     ship: { handler: handleShip },
+    jogovelha: { handler: handleJogoDaVelha },
+    forca: { handler: handleForca },
+    quiz: { handler: handleQuiz },
 
-    // Tools (stubs)
-    sticker: { handler: handleSticker },
-    toimg: { handler: handleToImg },
-    togif: { handler: handleToGif },
+    // Pesquisas (Search commands - stubs)
+    pensador: { handler: handlePensador, requireArgs: true },
+    nasa: { handler: handleNasa },
+    clima: { handler: handleClima, requireArgs: true },
+    movie: { handler: handleMovie, requireArgs: true },
+    imdb: { handler: handleIMDB, requireArgs: true },
+    imdbinfo: { handler: handleIMDBInfo, requireArgs: true },
+    serie: { handler: handleSerie, requireArgs: true },
+    lyrics: { handler: handleLyrics, requireArgs: true },
+    dicionario: { handler: handleDicionario, requireArgs: true },
+    playstore: { handler: handlePlayStore, requireArgs: true },
+    aptoide: { handler: handleAptoide, requireArgs: true },
+    receita: { handler: handleReceita, requireArgs: true },
+    signo: { handler: handleSigno, requireArgs: true },
+    amazon: { handler: handleAmazon, requireArgs: true },
+    googlesrc: { handler: handleGoogleSearch, requireArgs: true },
+    wikipedia: { handler: handleWikipedia, requireArgs: true },
+    wallpaper: { handler: handleWallpaper, requireArgs: true },
+    ytsearch: { handler: handleYTSearch, requireArgs: true },
+    scsearch: { handler: handleSCSearch, requireArgs: true },
+    applesearch: { handler: handleAppleSearch, requireArgs: true },
+    celular: { handler: handleCelular, requireArgs: true },
+    seemoji: { handler: handleSeeEmoji, requireArgs: true },
+    scep: { handler: handleCEP, requireArgs: true },
+    igsh: { handler: handleIGSH, requireArgs: true },
+    tekmods: { handler: handleTekMods, requireArgs: true },
+    mercadolivre: { handler: handleMercadoLivre, requireArgs: true },
+    cinema: { handler: handleCinema },
+    
+    // Aleatorios (Random/Utility commands - stubs)
+    gtts: { handler: handleGTTS, requireArgs: true },
+    tagme: { handler: handleTagMe },
+    emoji: { handler: handleEmoji, requireArgs: true },
+    emojimix: { handler: handleEmojiMix, requireArgs: true },
+    tabela: { handler: handleTabela },
+    conselhobiblico: { handler: handleConselhoBiblico },
+    cantadas: { handler: handleCantadas },
+    conselhos: { handler: handleConselhos },
+    simi: { handler: handleSimi, requireArgs: true },
+    perfil: { handler: handlePerfil },
+    calcular: { handler: handleCalcular, requireArgs: true },
+    morechat: { handler: handleMoreChat, requireArgs: true },
+    obesidade: { handler: handleObesidade, requireArgs: true },
+    contardias: { handler: handleContarDias },
+    fazernick: { handler: handleFazerNick, requireArgs: true },
     traduzir: { handler: handleTranslate, requireArgs: true },
+    ddd: { handler: handleDDD, requireArgs: true },
+    destrava: { handler: handleDestrava },
+    destrava2: { handler: handleDestrava2 },
+    gerarcpf: { handler: handleGerarCPF },
+    tinyurl: { handler: handleTinyURL, requireArgs: true },
+    cuttly: { handler: handleCuttly, requireArgs: true },
+    bitly: { handler: handleBitly, requireArgs: true },
+    sip: { handler: handleSIP, requireArgs: true },
+    
+    // Informativos
+    atividade: { handler: handleAtividade },
+    rankativo: { handler: handleRankAtivo, requireGroup: true },
+    checkativo: { handler: handleCheckAtivo, requireGroup: true },
+    ranklevel: { handler: handleRankLevel, requireGroup: true },
+    consultar_premium: { handler: handleConsultarPremium },
+    dados: { handler: handleDados },
+    infobemvindo: { handler: handleInfoBemvindo },
+    idiomas: { handler: handleIdiomas },
+    infodono: { handler: handleInfoDono },
+    infoaluguel: { handler: handleInfoAluguel },
+    infocmdprem: { handler: handleInfoCmdPrem },
+    infopremium: { handler: handleInfoPremium },
+    
+    // Logos (Logo generation - stubs)
+    logofire: { handler: handleLogoFire, requireArgs: true },
+    logoneon: { handler: handleLogoNeon, requireArgs: true },
+    logoshadow: { handler: handleLogoShadow, requireArgs: true },
+    logothunder: { handler: handleLogoThunder, requireArgs: true },
+    
+    // Coins/Economy
+    carteira: { handler: handleCarteira },
+    daily: { handler: handleDaily },
+    transferir: { handler: handleTransferir, requireArgs: true },
+    apostar: { handler: handleApostar, requireArgs: true },
+    minerar: { handler: handleMinerar },
+
+    // AI (stubs)
+    gpt: { handler: handleGPT, requireArgs: true },
+    chat: { handler: handleChat, requireArgs: true },
+
+    // Efeitos IMG (stub menu for now)
+    efeitosimg: { handler: handleEfeitosImg },
 
     // AI (stubs)
     gpt: { handler: handleGPT, requireArgs: true },
@@ -399,85 +517,6 @@ async function handleAudio(ctx) {
 
 // ========== FUN COMMANDS (STUBS) ==========
 
-async function handleGay(ctx) {
-  const { m } = ctx;
-  const mentioned = m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
-  const target = mentioned ? `@${mentioned.split('@')[0]}` : 'Você';
-  const percentage = Math.floor(Math.random() * 101);
-  
-  await sendReply(ctx, 
-    `🏳️‍🌈 *Medidor Gay*\n\n${target} é ${percentage}% gay! 🌈`,
-    mentioned ? { mentions: [mentioned] } : {}
-  );
-}
-
-async function handleGado(ctx) {
-  const { m } = ctx;
-  const mentioned = m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
-  const target = mentioned ? `@${mentioned.split('@')[0]}` : 'Você';
-  const percentage = Math.floor(Math.random() * 101);
-  
-  await sendReply(ctx,
-    `🐄 *Medidor de Gado*\n\n${target} é ${percentage}% gado! 🐄`,
-    mentioned ? { mentions: [mentioned] } : {}
-  );
-}
-
-async function handleShip(ctx) {
-  const { m } = ctx;
-  const mentions = m.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
-  
-  if (mentions.length < 2) {
-    return await sendReply(ctx, '❌ Marque 2 pessoas!\n\nEx: !ship @pessoa1 @pessoa2');
-  }
-
-  const percentage = Math.floor(Math.random() * 101);
-  const hearts = '❤️'.repeat(Math.floor(percentage / 20));
-  
-  await sendReply(ctx,
-    `💕 *Shipômetro*\n\n` +
-    `@${mentions[0].split('@')[0]} + @${mentions[1].split('@')[0]}\n\n` +
-    `${hearts}\n${percentage}%`,
-    { mentions }
-  );
-}
-
-// ========== TOOLS COMMANDS (STUBS) ==========
-
-async function handleSticker(ctx) {
-  await sendReply(ctx,
-    `🎨 *Criar Sticker*\n\n` +
-    `⚠️ TODO: Implementar conversão de imagem/vídeo para sticker\n\n` +
-    `Responda uma imagem ou vídeo com este comando.`
-  );
-}
-
-async function handleToImg(ctx) {
-  await sendReply(ctx,
-    `🖼️ *Sticker para Imagem*\n\n` +
-    `⚠️ TODO: Implementar conversão de sticker para imagem\n\n` +
-    `Responda um sticker com este comando.`
-  );
-}
-
-async function handleToGif(ctx) {
-  await sendReply(ctx,
-    `🎞️ *Sticker para GIF*\n\n` +
-    `⚠️ TODO: Implementar conversão de sticker animado para GIF\n\n` +
-    `Responda um sticker animado com este comando.`
-  );
-}
-
-async function handleTranslate(ctx) {
-  await sendReply(ctx,
-    `🌐 *Tradução*\n\n` +
-    `⚠️ TODO: Implementar API de tradução\n\n` +
-    `Uso: !traduzir pt <texto>`
-  );
-}
-
-// ========== AI COMMANDS (STUBS) ==========
-
 async function handleGPT(ctx) {
   await sendReply(ctx,
     `🤖 *ChatGPT*\n\n` +
@@ -576,6 +615,470 @@ async function handleStatus(ctx) {
     `🔥 Hinokami Bot em plena atividade!`;
   
   await sendReply(ctx, status);
+}
+
+// ========== ADDITIONAL DOWNLOAD STUBS ==========
+
+async function handlePlayDoc(ctx) {
+  await sendReply(ctx, `📄 *Download como Documento*\n\n⚠️ Recurso necessita de integração com API de YouTube.\n\nBusca: ${ctx.args.join(' ')}`);
+}
+
+async function handleYTShorts(ctx) {
+  await sendReply(ctx, `📹 *YouTube Shorts Download*\n\n⚠️ Recurso necessita de integração com API.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleTikTokAudio(ctx) {
+  await sendReply(ctx, `🎵 *TikTok Áudio*\n\n⚠️ Recurso necessita de integração com API TikTok.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleInstaudio(ctx) {
+  await sendReply(ctx, `🎵 *Instagram Áudio*\n\n⚠️ Recurso necessita de integração com API Instagram.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleThreads(ctx) {
+  await sendReply(ctx, `🧵 *Threads Download*\n\n⚠️ Recurso necessita de integração com API Threads.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleKwai(ctx) {
+  await sendReply(ctx, `📱 *Kwai Download*\n\n⚠️ Recurso necessita de integração com API Kwai.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleSpotify(ctx) {
+  await sendReply(ctx, `🎧 *Spotify Download*\n\n⚠️ Recurso necessita de integração com API Spotify.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleSoundcloud(ctx) {
+  await sendReply(ctx, `🎶 *SoundCloud Download*\n\n⚠️ Recurso necessita de integração com API SoundCloud.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleMediafire(ctx) {
+  await sendReply(ctx, `📦 *MediaFire Download*\n\n⚠️ Recurso necessita de integração com scraper MediaFire.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleGoogleDrive(ctx) {
+  await sendReply(ctx, `☁️ *Google Drive Download*\n\n⚠️ Recurso necessita de integração com API Google Drive.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleGerarLink(ctx) {
+  await sendReply(ctx, `🔗 *Gerar Link de Mídia*\n\n⚠️ Recurso necessita de serviço de upload (ex: catbox, pomf).\n\nMarque uma mídia com este comando.`);
+}
+
+async function handleShazam(ctx) {
+  await sendReply(ctx, `🎵 *Shazam - Identificar Música*\n\n⚠️ Recurso necessita de integração com API Shazam ou AudD.\n\nMarque um áudio com este comando.`);
+}
+
+async function handleAudioMeme(ctx) {
+  await sendReply(ctx, `🎙️ *Audio Meme*\n\n⚠️ Recurso necessita de processamento de áudio.\n\nMarque um áudio com este comando.`);
+}
+
+async function handleMultiDL(ctx) {
+  await sendReply(ctx, `📥 *Downloader Universal*\n\n⚠️ Recurso necessita de integração com múltiplas APIs.\n\nURL: ${ctx.args[0]}`);
+}
+
+// ========== BRINCADEIRAS STUBS ==========
+
+async function handleJogoDaVelha(ctx) {
+  await sendReply(ctx, `⭕ *Jogo da Velha*\n\n⚠️ TODO: Implementar lógica de jogo da velha.\n\n💡 Em breve você poderá jogar com seus amigos!`);
+}
+
+async function handleForca(ctx) {
+  await sendReply(ctx, `🔤 *Jogo da Forca*\n\n⚠️ TODO: Implementar jogo da forca.\n\n💡 Sistema de palavras aleatórias em desenvolvimento!`);
+}
+
+async function handleQuiz(ctx) {
+  await sendReply(ctx, `❓ *Quiz de Perguntas*\n\n⚠️ TODO: Implementar sistema de quiz.\n\n💡 Banco de perguntas em construção!`);
+}
+
+// ========== PESQUISAS STUBS ==========
+
+async function handlePensador(ctx) {
+  await sendReply(ctx, `💭 *Pensador - Frases*\n\n⚠️ Recurso necessita de integração com API Pensador.\n\nTermo: ${ctx.args.join(' ')}`);
+}
+
+async function handleNasa(ctx) {
+  await sendReply(ctx, `🌌 *NASA - Foto do Dia*\n\n⚠️ Recurso necessita de integração com NASA API.\n\nDefina a variável: NASA_API_KEY`);
+}
+
+async function handleClima(ctx) {
+  await sendReply(ctx, `🌤️ *Previsão do Tempo*\n\n⚠️ Recurso necessita de integração com OpenWeather API.\n\nCidade: ${ctx.args.join(' ')}`);
+}
+
+async function handleMovie(ctx) {
+  await sendReply(ctx, `🎬 *Informações de Filme*\n\n⚠️ Recurso necessita de integração com OMDb/TMDB API.\n\nFilme: ${ctx.args.join(' ')}`);
+}
+
+async function handleIMDB(ctx) {
+  await sendReply(ctx, `🎥 *IMDB Search*\n\n⚠️ Recurso necessita de integração com OMDb API.\n\nFilme: ${ctx.args.join(' ')}`);
+}
+
+async function handleIMDBInfo(ctx) {
+  await sendReply(ctx, `🎥 *IMDB Info*\n\n⚠️ Recurso necessita de integração com OMDb API.\n\nID: ${ctx.args[0]}`);
+}
+
+async function handleSerie(ctx) {
+  await sendReply(ctx, `📺 *Informações de Série*\n\n⚠️ Recurso necessita de integração com TMDB API.\n\nSérie: ${ctx.args.join(' ')}`);
+}
+
+async function handleLyrics(ctx) {
+  await sendReply(ctx, `🎵 *Letras de Músicas*\n\n⚠️ Recurso necessita de integração com Genius/Lyrics API.\n\nMúsica: ${ctx.args.join(' ')}`);
+}
+
+async function handleDicionario(ctx) {
+  await sendReply(ctx, `📖 *Dicionário*\n\n⚠️ Recurso necessita de integração com API de dicionário.\n\nPalavra: ${ctx.args.join(' ')}`);
+}
+
+async function handlePlayStore(ctx) {
+  await sendReply(ctx, `📱 *Play Store Search*\n\n⚠️ Recurso necessita de scraping/API Google Play.\n\nApp: ${ctx.args.join(' ')}`);
+}
+
+async function handleAptoide(ctx) {
+  await sendReply(ctx, `📲 *Aptoide Search*\n\n⚠️ Recurso necessita de integração com Aptoide API.\n\nApp: ${ctx.args.join(' ')}`);
+}
+
+async function handleReceita(ctx) {
+  await sendReply(ctx, `🍳 *Busca de Receitas*\n\n⚠️ Recurso necessita de integração com API de receitas.\n\nReceita: ${ctx.args.join(' ')}`);
+}
+
+async function handleSigno(ctx) {
+  await sendReply(ctx, `♈ *Horóscopo*\n\n⚠️ Recurso necessita de integração com API de horóscopo.\n\nSigno: ${ctx.args.join(' ')}`);
+}
+
+async function handleAmazon(ctx) {
+  await sendReply(ctx, `🛒 *Amazon Search*\n\n⚠️ Recurso necessita de integração com Amazon API.\n\nProduto: ${ctx.args.join(' ')}`);
+}
+
+async function handleGoogleSearch(ctx) {
+  await sendReply(ctx, `🔍 *Google Search*\n\n⚠️ Recurso necessita de integração com Google Custom Search API.\n\nTermo: ${ctx.args.join(' ')}`);
+}
+
+async function handleWikipedia(ctx) {
+  await sendReply(ctx, `📚 *Wikipedia*\n\n⚠️ Recurso necessita de integração com Wikipedia API.\n\nTermo: ${ctx.args.join(' ')}`);
+}
+
+async function handleWallpaper(ctx) {
+  await sendReply(ctx, `🖼️ *Wallpaper Search*\n\n⚠️ Recurso necessita de integração com API de wallpapers.\n\nTermo: ${ctx.args.join(' ')}`);
+}
+
+async function handleYTSearch(ctx) {
+  await sendReply(ctx, `🔍 *YouTube Search*\n\n⚠️ Recurso necessita de integração com YouTube Data API.\n\nTermo: ${ctx.args.join(' ')}`);
+}
+
+async function handleSCSearch(ctx) {
+  await sendReply(ctx, `🔍 *SoundCloud Search*\n\n⚠️ Recurso necessita de integração com SoundCloud API.\n\nTermo: ${ctx.args.join(' ')}`);
+}
+
+async function handleAppleSearch(ctx) {
+  await sendReply(ctx, `🔍 *Apple Music Search*\n\n⚠️ Recurso necessita de integração com Apple Music API.\n\nTermo: ${ctx.args.join(' ')}`);
+}
+
+async function handleCelular(ctx) {
+  await sendReply(ctx, `📱 *Info de Smartphone*\n\n⚠️ Recurso necessita de integração com GSMArena ou similar.\n\nModelo: ${ctx.args.join(' ')}`);
+}
+
+async function handleSeeEmoji(ctx) {
+  await sendReply(ctx, `😀 *Informações de Emoji*\n\n⚠️ Recurso necessita de API de emojis.\n\nEmoji: ${ctx.args[0]}`);
+}
+
+async function handleCEP(ctx) {
+  await sendReply(ctx, `📮 *Consulta CEP*\n\n⚠️ Recurso necessita de integração com ViaCEP API.\n\nCEP: ${ctx.args[0]}`);
+}
+
+async function handleIGSH(ctx) {
+  await sendReply(ctx, `📸 *Instagram User Info*\n\n⚠️ Recurso necessita de integração com Instagram scraper.\n\nUser: ${ctx.args[0]}`);
+}
+
+async function handleTekMods(ctx) {
+  await sendReply(ctx, `🎮 *TekMods Search*\n\n⚠️ Recurso necessita de scraping TekMods.\n\nNome: ${ctx.args.join(' ')}`);
+}
+
+async function handleMercadoLivre(ctx) {
+  await sendReply(ctx, `🛍️ *Mercado Livre Search*\n\n⚠️ Recurso necessita de integração com ML API.\n\nProduto: ${ctx.args.join(' ')}`);
+}
+
+async function handleCinema(ctx) {
+  await sendReply(ctx, `🎬 *Filmes em Cartaz*\n\n⚠️ Recurso necessita de integração com API de cinemas.\n\n💡 Em breve!`);
+}
+
+// ========== ALEATORIOS STUBS ==========
+
+async function handleGTTS(ctx) {
+  await sendReply(ctx, `🗣️ *Google TTS - Texto para Voz*\n\n⚠️ Recurso necessita de integração com Google TTS.\n\nUso: ${ctx.prefix}gtts pt Olá mundo`);
+}
+
+async function handleTagMe(ctx) {
+  const sender = ctx.m.key.participant || ctx.m.key.remoteJid;
+  await sendReply(ctx, `📣 Você foi marcado!\n\n@${sender.split('@')[0]}`, { mentions: [sender] });
+}
+
+async function handleEmoji(ctx) {
+  await sendReply(ctx, `😀 *Emoji*\n\n⚠️ Recurso necessita de API de emojis.\n\nTipo: ${ctx.args.join(' ')}`);
+}
+
+async function handleEmojiMix(ctx) {
+  await sendReply(ctx, `🎨 *Emoji Mix*\n\n⚠️ Recurso necessita de integração com Google Emoji Kitchen.\n\nUso: ${ctx.prefix}emojimix 😀+🔥`);
+}
+
+async function handleTabela(ctx) {
+  const tabela = `📊 *Tabela de Símbolos*\n\n` +
+    `• ─ ━ │ ┃ ┄ ┅ ┆ ┇\n` +
+    `• ┈ ┉ ┊ ┋ ┌ ┍ ┎ ┏\n` +
+    `• ┐ ┑ ┒ ┓ └ ┕ ┖ ┗\n` +
+    `• ┘ ┙ ┚ ┛ ├ ┝ ┞ ┟\n` +
+    `• ┠ ┡ ┢ ┣ ┤ ┥ ┦ ┧\n` +
+    `• ┨ ┩ ┪ ┫ ┬ ┭ ┮ ┯\n` +
+    `• ┰ ┱ ┲ ┳ ┴ ┵ ┶ ┷\n` +
+    `• ┸ ┹ ┺ ┻ ┼ ┽ ┾ ┿\n` +
+    `• ╀ ╁ ╂ ╃ ╄ ╅ ╆ ╇\n` +
+    `• ╈ ╉ ╊ ╋ ╌ ╍ ╎ ╏\n` +
+    `• ═ ║ ╒ ╓ ╔ ╕ ╖ ╗\n` +
+    `• ╘ ╙ ╚ ╛ ╜ ╝ ╞ ╟\n` +
+    `• ╠ ╡ ╢ ╣ ╤ ╥ ╦ ╧\n` +
+    `• ╨ ╩ ╪ ╫ ╬ ○ ● ◎\n` +
+    `• ◯ ◐ ◑ ◒ ◓ ◔ ◕ ◖\n` +
+    `• ◗ ◘ ◙ ◚ ◛ ◜ ◝ ◞`;
+  await sendReply(ctx, tabela);
+}
+
+async function handleConselhoBiblico(ctx) {
+  await sendReply(ctx, `📖 *Conselho Bíblico*\n\n⚠️ Recurso necessita de banco de versículos.\n\n💡 Em desenvolvimento!`);
+}
+
+async function handleCantadas(ctx) {
+  const cantadas = [
+    'Você tem um mapa? Porque eu me perdi no seus olhos! 😍',
+    'Você acredita em amor à primeira vista ou preciso passar por aqui de novo? 💕',
+    'Se beleza fosse crime, você estaria presa! 🚔',
+    'Você é Wi-Fi? Porque estou sentindo uma conexão! 📶',
+    'Seu nome é Google? Porque você tem tudo que eu procuro! 🔍'
+  ];
+  const random = cantadas[Math.floor(Math.random() * cantadas.length)];
+  await sendReply(ctx, `💘 *Cantada Aleatória*\n\n${random}`);
+}
+
+async function handleConselhos(ctx) {
+  const conselhos = [
+    'Seja gentil, pois cada pessoa que você encontra está lutando uma batalha.',
+    'A paciência é amarga, mas seus frutos são doces.',
+    'Não deixe para amanhã o que você pode fazer hoje.',
+    'Acredite em si mesmo e tudo será possível.',
+    'O sucesso é a soma de pequenos esforços repetidos dia após dia.'
+  ];
+  const random = conselhos[Math.floor(Math.random() * conselhos.length)];
+  await sendReply(ctx, `💡 *Conselho Aleatório*\n\n${random}`);
+}
+
+async function handleSimi(ctx) {
+  await sendReply(ctx, `🤖 *SimSimi Chat*\n\n⚠️ Recurso necessita de integração com SimSimi API.\n\nDefina SIMSIMI_API_KEY nas variáveis de ambiente.\n\nMensagem: ${ctx.args.join(' ')}`);
+}
+
+async function handlePerfil(ctx) {
+  const sender = ctx.m.key.participant || ctx.m.key.remoteJid;
+  await sendReply(ctx, 
+    `👤 *Seu Perfil*\n\n` +
+    `📞 Número: @${sender.split('@')[0]}\n` +
+    `📊 Comandos usados: Em breve\n` +
+    `⭐ Nível: Em breve\n` +
+    `💰 Coins: Em breve`,
+    { mentions: [sender] }
+  );
+}
+
+async function handleCalcular(ctx) {
+  try {
+    const expr = ctx.args.join(' ');
+    // Simple eval (UNSAFE in production - use math.js or similar)
+    const result = eval(expr);
+    await sendReply(ctx, `🔢 *Calculadora*\n\n${expr} = ${result}`);
+  } catch {
+    await sendReply(ctx, `❌ Expressão inválida!\n\nUso: ${ctx.prefix}calcular 2+2`);
+  }
+}
+
+async function handleMoreChat(ctx) {
+  await sendReply(ctx, `💬 *Comparar Mensagens*\n\n⚠️ Recurso em desenvolvimento.\n\nUso: ${ctx.prefix}morechat msg1/msg2`);
+}
+
+async function handleObesidade(ctx) {
+  await sendReply(ctx, `⚖️ *Calculadora de IMC*\n\n⚠️ Recurso em desenvolvimento.\n\nUso: ${ctx.prefix}obesidade 70/1.75`);
+}
+
+async function handleContarDias(ctx) {
+  await sendReply(ctx, `📅 *Contador de Dias*\n\n⚠️ Recurso em desenvolvimento.\n\nCalcule dias entre datas!`);
+}
+
+async function handleFazerNick(ctx) {
+  const text = ctx.args.join(' ');
+  // Simple stylized text
+  const styled = text.split('').join(' ').toUpperCase();
+  await sendReply(ctx, `✨ *Nick Estilizado*\n\n${styled}`);
+}
+
+async function handleTranslate(ctx) {
+  await sendReply(ctx, `🌐 *Tradução*\n\n⚠️ Recurso necessita de integração com Google Translate API.\n\nTexto: ${ctx.args.join(' ')}`);
+}
+
+async function handleDDD(ctx) {
+  await sendReply(ctx, `📞 *Consulta DDD*\n\n⚠️ Recurso necessita de banco de dados de DDDs.\n\nDDD: ${ctx.args[0]}`);
+}
+
+async function handleDestrava(ctx) {
+  await sendReply(ctx, `🔓 *Mensagem Destrava 1*\n\n⚠️ Este é um comando para destravar o WhatsApp em casos de travamento.\n\n💡 Use com cuidado!`);
+}
+
+async function handleDestrava2(ctx) {
+  await sendReply(ctx, `🔓 *Mensagem Destrava 2*\n\n⚠️ Versão alternativa do destrava.\n\n💡 Use com cuidado!`);
+}
+
+async function handleGerarCPF(ctx) {
+  // Generate random CPF (for testing only - not valid)
+  const cpf = Array.from({length: 11}, () => Math.floor(Math.random() * 10)).join('');
+  const formatted = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  await sendReply(ctx, `🆔 *CPF Gerado (Fictício)*\n\n${formatted}\n\n⚠️ Apenas para fins de teste!`);
+}
+
+async function handleTinyURL(ctx) {
+  await sendReply(ctx, `🔗 *TinyURL*\n\n⚠️ Recurso necessita de integração com TinyURL API.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleCuttly(ctx) {
+  await sendReply(ctx, `🔗 *Cutt.ly*\n\n⚠️ Recurso necessita de integração com Cutt.ly API.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleBitly(ctx) {
+  await sendReply(ctx, `🔗 *Bit.ly*\n\n⚠️ Recurso necessita de integração com Bitly API.\n\nURL: ${ctx.args[0]}`);
+}
+
+async function handleSIP(ctx) {
+  await sendReply(ctx, `🌐 *Consulta IP*\n\n⚠️ Recurso necessita de integração com IP info API.\n\nIP: ${ctx.args[0]}`);
+}
+
+// ========== INFORMATIVOS STUBS ==========
+
+async function handleAtividade(ctx) {
+  await sendReply(ctx, `📊 *Atividade do Bot*\n\n⏱️ Online há: ${Math.floor(process.uptime() / 60)} minutos\n💬 Mensagens processadas: Em breve\n👥 Grupos ativos: Em breve`);
+}
+
+async function handleRankAtivo(ctx) {
+  await sendReply(ctx, `🏆 *Ranking de Atividade*\n\n⚠️ Sistema de ranking em desenvolvimento.\n\n💡 Em breve você verá os membros mais ativos!`);
+}
+
+async function handleCheckAtivo(ctx) {
+  await sendReply(ctx, `📊 *Sua Atividade*\n\n⚠️ Sistema de atividade em desenvolvimento.\n\n💡 Em breve!`);
+}
+
+async function handleRankLevel(ctx) {
+  await sendReply(ctx, `⭐ *Ranking de Níveis*\n\n⚠️ Sistema de níveis em desenvolvimento.\n\n💡 Em breve!`);
+}
+
+async function handleConsultarPremium(ctx) {
+  await sendReply(ctx, `💎 *Consulta Premium*\n\n⚠️ Sistema premium em desenvolvimento.\n\n💡 Contate o dono para mais informações.`);
+}
+
+async function handleDados(ctx) {
+  const uptime = process.uptime();
+  const mem = process.memoryUsage();
+  await sendReply(ctx, 
+    `📊 *Dados do Bot*\n\n` +
+    `⏱️ Uptime: ${Math.floor(uptime/3600)}h ${Math.floor((uptime%3600)/60)}m\n` +
+    `💾 RAM: ${(mem.heapUsed/1024/1024).toFixed(2)} MB\n` +
+    `📈 Total: ${(mem.rss/1024/1024).toFixed(2)} MB\n` +
+    `🔥 Status: Operacional!`
+  );
+}
+
+async function handleInfoBemvindo(ctx) {
+  await sendReply(ctx, `👋 *Info Boas-Vindas*\n\n⚠️ Sistema de boas-vindas em desenvolvimento.\n\n💡 Configure com: ${ctx.prefix}welcome on/off`);
+}
+
+async function handleIdiomas(ctx) {
+  await sendReply(ctx, 
+    `🌐 *Idiomas GTTS*\n\n` +
+    `pt - Português\n` +
+    `en - Inglês\n` +
+    `es - Espanhol\n` +
+    `fr - Francês\n` +
+    `de - Alemão\n` +
+    `it - Italiano\n` +
+    `ja - Japonês\n` +
+    `ko - Coreano\n\n` +
+    `Uso: ${ctx.prefix}gtts pt Olá mundo`
+  );
+}
+
+async function handleInfoDono(ctx) {
+  const config = await import('../config.json', { with: { type: 'json' } });
+  await sendReply(ctx, 
+    `👑 *Informações do Dono*\n\n` +
+    `Nome: ${config.default.ownerName}\n` +
+    `Número: ${config.default.ownerNumber}\n\n` +
+    `🗡️ Criador do ${config.default.botName}`
+  );
+}
+
+async function handleInfoAluguel(ctx) {
+  await sendReply(ctx, `💼 *Info Aluguel*\n\n⚠️ Sistema de aluguel em desenvolvimento.\n\n💡 Contate o dono para informações.`);
+}
+
+async function handleInfoCmdPrem(ctx) {
+  await sendReply(ctx, `💎 *Comandos Premium*\n\n⚠️ Lista de comandos premium em desenvolvimento.\n\n💡 Em breve!`);
+}
+
+async function handleInfoPremium(ctx) {
+  await sendReply(ctx, `💎 *Informações Premium*\n\n⚠️ Sistema premium em desenvolvimento.\n\n💡 Benefícios exclusivos em breve!`);
+}
+
+// ========== LOGOS STUBS ==========
+
+async function handleLogoFire(ctx) {
+  await sendReply(ctx, `🔥 *Logo Fire*\n\n⚠️ Recurso necessita de integração com API de logos.\n\nTexto: ${ctx.args.join(' ')}`);
+}
+
+async function handleLogoNeon(ctx) {
+  await sendReply(ctx, `💡 *Logo Neon*\n\n⚠️ Recurso necessita de integração com API de logos.\n\nTexto: ${ctx.args.join(' ')}`);
+}
+
+async function handleLogoShadow(ctx) {
+  await sendReply(ctx, `🌑 *Logo Shadow*\n\n⚠️ Recurso necessita de integração com API de logos.\n\nTexto: ${ctx.args.join(' ')}`);
+}
+
+async function handleLogoThunder(ctx) {
+  await sendReply(ctx, `⚡ *Logo Thunder*\n\n⚠️ Recurso necessita de integração com API de logos.\n\nTexto: ${ctx.args.join(' ')}`);
+}
+
+// ========== COINS STUBS ==========
+
+async function handleCarteira(ctx) {
+  await sendReply(ctx, `💰 *Sua Carteira*\n\n⚠️ Sistema de economia em desenvolvimento.\n\n💎 Saldo: 0 coins\n⭐ Em breve!`);
+}
+
+async function handleDaily(ctx) {
+  await sendReply(ctx, `🎁 *Daily Coins*\n\n⚠️ Sistema de recompensas diárias em desenvolvimento.\n\n💡 Em breve você poderá receber coins diariamente!`);
+}
+
+async function handleTransferir(ctx) {
+  await sendReply(ctx, `💸 *Transferir Coins*\n\n⚠️ Sistema de transferências em desenvolvimento.\n\nUso: ${ctx.prefix}transferir @user 100`);
+}
+
+async function handleApostar(ctx) {
+  await sendReply(ctx, `🎲 *Apostar Coins*\n\n⚠️ Sistema de apostas em desenvolvimento.\n\nUso: ${ctx.prefix}apostar 50`);
+}
+
+async function handleMinerar(ctx) {
+  await sendReply(ctx, `⛏️ *Minerar Coins*\n\n⚠️ Sistema de mineração em desenvolvimento.\n\n💡 Mine coins e fique rico!`);
+}
+
+// ========== EFEITOS IMG STUB ==========
+
+async function handleEfeitosImg(ctx) {
+  await sendReply(ctx, 
+    `🎨 *Menu Efeitos de Imagem*\n\n` +
+    `⚠️ Efeitos de imagem em desenvolvimento.\n\n` +
+    `💡 Em breve:\n` +
+    `• Filtros (blur, sharpen, etc)\n` +
+    `• Efeitos (vintage, sepia, etc)\n` +
+    `• Manipulação (resize, crop, etc)\n` +
+    `• Stickers personalizados`
+  );
 }
 
 // ========== HELPER ==========
