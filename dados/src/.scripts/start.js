@@ -101,6 +101,26 @@ async function start() {
     colorLogger.logConfigInfo('Owner', config.ownerNumber || 'Não configurado', 
       config.ownerNumber?.includes('XXX') ? 'warning' : 'success');
     colorLogger.logConfigInfo('Prefix', config.prefix || '!', 'info');
+    colorLogger.logConfigInfo('Sticker Pack', config.stickerPack || 'Hinokami Bot', 'info');
+    colorLogger.logConfigInfo('Sticker Author', config.stickerAuthor || 'Tanjiro', 'info');
+    colorLogger.logSectionEnd();
+    
+    // Display available features
+    colorLogger.logSection('✨ RECURSOS DISPONÍVEIS');
+    const features = [
+      '🎨 Figurinhas (sticker, toimg, fsticker)',
+      '🔍 Pesquisas (googlesrc, wikipedia, scep, ddd)',
+      '🎲 Aleatórios (traduzir, calcular, geracpf, obesidade, tinyurl)',
+      '📊 Informativos (ping, dados, atividade, idiomas)',
+      '👑 Admin (ban, add, promover, antilink)',
+      '⛱️ Brincadeiras (gay, gado, ship)',
+      '📥 Downloads (stubs - em desenvolvimento)',
+      '🪄 Logos (stubs - em desenvolvimento)',
+      '💰 Economia (stubs - em desenvolvimento)'
+    ];
+    features.forEach(feature => {
+      colorLogger.logInfo('Categoria', feature);
+    });
     colorLogger.logSectionEnd();
     
     colorLogger.logInfo('Sistema', 'Iniciando Hinokami Bot...');
@@ -111,7 +131,15 @@ async function start() {
     colorLogger.logSuccess('Sistema', 'Bot inicializado com sucesso!');
     logger.info('✅ Bot inicializado com sucesso!');
     
-    // Display ready message
+    // Display ready message with stats
+    const stats = {
+      'Node.js': process.version,
+      'Memória': `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
+      'Plataforma': `${process.platform} ${process.arch}`,
+      'PID': process.pid
+    };
+    colorLogger.logStats(stats);
+    
     colorLogger.logReady(
       config.botName || 'Hinokami Bot',
       config.ownerNumber || 'Não configurado',

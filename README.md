@@ -227,11 +227,38 @@ Downloads automáticos de múltiplas plataformas:
 
 Criação e manipulação de stickers:
 
+**✅ Totalmente Implementado:**
+- `!sticker` - Imagem/vídeo para sticker (marque mídia ou envie com legenda)
+- `!s` - Alias para sticker
+- `!fsticker` - Alias para sticker
+- `!figurinha` - Alias para sticker
+- `!toimg` - Sticker para imagem (marque sticker)
+
+**⚙️ Configurações e Limites:**
+- **Imagens**: Máximo 5MB
+- **Vídeos**: Máximo 10MB e 10 segundos
+- **Formato de saída**: WebP (estático para imagens, animado para vídeos)
+- **Tamanho**: Redimensionado automaticamente para 512x512px
+- **Metadata**: Nome do pacote e autor configuráveis em `config.json`
+- **Suporte**: Imagens (JPG, PNG), Vídeos (MP4, MOV), GIFs
+
+**📋 Como usar:**
+```
+# Converter imagem para sticker
+!sticker (envie com uma imagem)
+!sticker (marque uma imagem com reply)
+
+# Converter vídeo para sticker animado
+!sticker (envie com um vídeo curto)
+!sticker (marque um vídeo com reply)
+
+# Converter sticker para imagem
+!toimg (marque um sticker)
+```
+
+**🚧 Em Desenvolvimento:**
 - `!ttp <texto>` - Texto para sticker estático
 - `!attp <texto>` - Texto para sticker animado
-- `!fsticker` - Foto para sticker (marque foto)
-- `!sticker` - Imagem/vídeo para sticker (marque mídia)
-- `!toimg` - Sticker para imagem (marque sticker)
 - `!rename <nome/autor>` - Renomear sticker
 - `!qc` - Quote para sticker (marque mensagem)
 - `!brat <texto>` - Sticker estilo "brat"
@@ -242,6 +269,14 @@ Criação e manipulação de stickers:
 #### 🔍 Pesquisas
 
 Busca em diversas plataformas e serviços:
+
+**✅ Implementado:**
+- `!googlesrc <termo>` - Busca no Google (via google-it)
+- `!wikipedia <termo>` - Busca na Wikipedia PT-BR
+- `!scep <cep>` - Consultar CEP (via ViaCEP)
+- `!ddd <código>` - Consultar DDD (database brasileiro)
+
+**🚧 Em Desenvolvimento:**
 
 **Entretenimento:**
 - `!pensador <termo>` - Frases e pensamentos
@@ -268,8 +303,6 @@ Busca em diversas plataformas e serviços:
 - `!tekmods <nome>` - Buscar mods de jogos
 
 **Buscadores:**
-- `!googlesrc <termo>` - Busca no Google
-- `!wikipedia <termo>` - Busca na Wikipedia
 - `!pinterest <termo>` - Buscar imagens
 - `!wallpaper <termo>` - Papéis de parede
 - `!ytsearch <música>` - Buscar no YouTube
@@ -277,8 +310,6 @@ Busca em diversas plataformas e serviços:
 - `!applesearch <música>` - Buscar no Apple Music
 
 **Consultas:**
-- `!scep <cep>` - Consultar CEP
-- `!ddd <código>` - Consultar DDD
 - `!igsh <usuário>` - Info de usuário Instagram
 - `!seemoji <emoji>` - Informações sobre emoji
 
@@ -288,9 +319,22 @@ Busca em diversas plataformas e serviços:
 
 Comandos utilitários diversos:
 
+**✅ Implementado:**
+- `!traduzir <texto>` - Traduzir texto (Google Translate para PT)
+- `!calcular <expressão>` - Calculadora matemática
+- `!obesidade <peso/altura>` - Calcular IMC com classificação
+- `!geracpf` - Gerar CPF fictício válido
+- `!tinyurl <link>` - Encurtar URL com TinyURL
+- `!tabela` - Tabela de símbolos especiais
+- `!destrava` - Mensagem anti-travamento
+- `!destrava2` - Alias para destrava
+- `!conselhos` - Conselho motivacional aleatório
+- `!cantadas` - Cantada/pickup line aleatória
+
+**🚧 Em Desenvolvimento:**
+
 **Conversão & Formatação:**
 - `!gtts <idioma+texto>` - Texto para voz (Google TTS)
-- `!traduzir <texto>` - Traduzir texto
 - `!emoji <emoji/tipo>` - Obter emoji
 - `!emojimix <emoji+emoji>` - Misturar emojis
 - `!fazernick <texto>` - Gerar nick estilizado
@@ -298,23 +342,14 @@ Comandos utilitários diversos:
 **Entretenimento:**
 - `!tagme` - Marcar a si mesmo
 - `!conselhobiblico` - Conselho bíblico aleatório
-- `!cantadas` - Cantada aleatória
-- `!conselhos` - Conselho aleatório
 - `!simi <texto>` - Conversar com SimSimi
 
 **Utilitários:**
 - `!perfil` - Ver seu perfil
-- `!calcular <expressão>` - Calculadora
 - `!morechat <msg1/msg2>` - Comparar mensagens
-- `!obesidade <peso/altura>` - Calcular IMC
 - `!contardias` - Contar dias entre datas
-- `!tabela` - Tabela de símbolos
-- `!destrava` - Mensagem destrava 1
-- `!destrava2` - Mensagem destrava 2
-- `!gerarcpf` - Gerar CPF fictício
 
 **Encurtadores de Link:**
-- `!tinyurl <link>` - Encurtar com TinyURL
 - `!cuttly <link>` - Encurtar com Cutt.ly
 - `!bitly <link>` - Encurtar com Bitly
 
@@ -327,24 +362,22 @@ Comandos utilitários diversos:
 
 Informações sobre o bot e o grupo:
 
-**Status do Bot:**
-- `!ping` - Verificar latência do bot
-- `!atividade` - Ver atividade do bot
-- `!dados` - Estatísticas do bot
-- `!idiomas` - Idiomas disponíveis para GTTS
+**✅ Implementado:**
+- `!ping` - Verificar latência do bot com cálculo em tempo real
+- `!dados` - Estatísticas completas do bot (uptime, memória, CPU, sistema)
+- `!atividade` - Ver tempo online do bot
+- `!idiomas` - Lista de idiomas disponíveis para GTTS
+- `!infodono` - Informações do dono do bot
+- `!infobemvindo` - Informações sobre sistema de boas-vindas
+- `!infoaluguel` - Informações sobre aluguel do bot
+- `!infopremium` - Informações sobre sistema premium
+- `!consultar_premium` - Consultar seu status premium
+- `!infocmdprem` - Info sobre gerenciamento de comandos premium
 
-**Ranking & Níveis:**
+**🚧 Em Desenvolvimento:**
 - `!rankativo` - Ranking de atividade
 - `!checkativo` - Verificar sua atividade
 - `!ranklevel` - Ranking de níveis
-
-**Informações:**
-- `!infobemvindo` - Info sobre boas-vindas
-- `!infodono` - Informações do dono
-- `!infoaluguel` - Info sobre aluguel do bot
-- `!infopremium` - Info sobre usuários premium
-- `!infocmdprem` - Comandos premium
-- `!consultar_premium` - Consultar status premium
 
 ---
 
@@ -438,16 +471,50 @@ Muitos comandos possuem aliases (nomes alternativos):
 
 ### APIs Externas (Opcional)
 
-Alguns recursos requerem chaves de API externas:
+Alguns recursos requerem chaves de API externas. Configure as variáveis de ambiente conforme necessário:
+
+#### Criar arquivo `.env` (opcional)
+
+```bash
+# APIs de Downloads
+YOUTUBE_API_KEY=sua_chave_aqui
+SPOTIFY_CLIENT_ID=sua_chave_aqui
+SPOTIFY_CLIENT_SECRET=sua_chave_aqui
+
+# APIs de Pesquisa
+NASA_API_KEY=sua_chave_aqui
+WEATHER_API_KEY=sua_chave_aqui
+OMDB_API_KEY=sua_chave_aqui
+
+# APIs de IA
+OPENAI_API_KEY=sua_chave_aqui
+SIMI_API_KEY=sua_chave_aqui
+
+# Encurtadores de URL
+BITLY_ACCESS_TOKEN=seu_token_aqui
+CUTTLY_API_KEY=sua_chave_aqui
+```
 
 #### Downloads
 - **YouTube**: Considere usar `ytdl-core` ou APIs como `y2mate`
 - **TikTok**: APIs de scraping como `tiktok-scraper`
 - **Instagram**: `instagram-scraper` ou APIs similares
+- **Spotify**: [Spotify for Developers](https://developer.spotify.com/)
+
+#### Pesquisas
+- **NASA**: [NASA API](https://api.nasa.gov/)
+- **Weather**: [OpenWeatherMap](https://openweathermap.org/api)
+- **OMDB**: [OMDB API](http://www.omdbapi.com/)
 
 #### IA
 - **OpenAI GPT**: Registre-se em [OpenAI](https://openai.com) e obtenha uma API key
+- **SimSimi**: [SimSimi API](https://workshop.simsimi.com/)
 - **Geração de Imagens**: DALL-E, Midjourney, Stable Diffusion
+
+#### Encurtadores
+- **Bitly**: [Bitly Developers](https://dev.bitly.com/)
+- **Cuttly**: [Cutt.ly API](https://cutt.ly/cuttly-api)
+- **TinyURL**: Funciona sem API key (implementado)
 
 Configure as chaves em variáveis de ambiente ou no código dos handlers correspondentes (marcados com `TODO`).
 
