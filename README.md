@@ -40,7 +40,35 @@ Todas as mensagens, menus e interações são temáticas do Tanjiro, incluindo:
 - **Node.js**: 20.0.0 ou superior
 - **NPM**: Instalado com Node.js
 - **WhatsApp**: Conta válida para autenticação
-- **FFmpeg**: Necessário para criação de stickers animados
+- **FFmpeg**: Necessário para criar stickers animados (opcional para stickers estáticos)
+
+### Instalando FFmpeg
+
+O FFmpeg é necessário para converter vídeos em stickers animados.
+
+**Ubuntu/Debian:**
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+**Windows:**
+1. Baixe o FFmpeg de https://ffmpeg.org/download.html
+2. Extraia o arquivo ZIP
+3. Adicione a pasta `bin` ao PATH do sistema
+4. Reinicie o terminal
+
+**macOS:**
+```bash
+brew install ffmpeg
+```
+
+**Verificar instalação:**
+```bash
+ffmpeg -version
+```
+
+Se o FFmpeg não estiver instalado, o bot funcionará normalmente para stickers estáticos (imagens), mas exibirá uma mensagem de erro ao tentar criar stickers animados (vídeos/GIFs).
 
 ## 🚀 Instalação
 
@@ -51,38 +79,13 @@ git clone https://github.com/MAY0LPHI/TETEEEE.git
 cd TETEEEE
 ```
 
-### 2. Instale o FFmpeg
-
-O FFmpeg é necessário para conversão de vídeos/GIFs em stickers animados.
-
-**Ubuntu/Debian:**
-```bash
-sudo apt-get update
-sudo apt-get install -y ffmpeg
-```
-
-**macOS:**
-```bash
-brew install ffmpeg
-```
-
-**Windows:**
-1. Baixe o FFmpeg de [ffmpeg.org](https://ffmpeg.org/download.html)
-2. Extraia e adicione ao PATH do sistema
-3. Ou use: `choco install ffmpeg` (com Chocolatey)
-
-**Verificar instalação:**
-```bash
-ffmpeg -version
-```
-
-### 3. Instale as dependências
+### 2. Instale as dependências
 
 ```bash
 npm install
 ```
 
-### 4. Configure o bot
+### 3. Configure o bot
 
 ```bash
 npm run config:install
@@ -95,7 +98,7 @@ Você será guiado por um assistente interativo que irá:
 - Ajustar configurações de comportamento
 - Criar estrutura de banco de dados
 
-### 5. Inicie o bot
+### 4. Inicie o bot
 
 ```bash
 npm start
@@ -226,35 +229,34 @@ Downloads automáticos de múltiplas plataformas:
 
 #### 🎨 Figurinhas (Stickers)
 
-Criação e manipulação de stickers (funcional com suporte a imagens estáticas e vídeos/GIFs animados):
+Criação e manipulação de stickers com suporte completo a imagens estáticas e vídeos animados:
 
-**Criar Stickers:**
-- `!sticker` - Converter imagem/vídeo para sticker
-  - Envie uma imagem com `!sticker` (estática)
-  - Envie um vídeo/GIF com `!sticker` (animada, max 10s/5MB)
-  - Ou responda (quote) uma imagem/vídeo com `!sticker`
-  - Metadata automático: pack="YURI BOT", author="MAY0LPHI"
-
-**Converter Stickers:**
-- `!toimg` - Converter sticker para imagem
-  - Responda um sticker com `!toimg`
-- `!togif` - Converter sticker animado para GIF/vídeo
-  - Responda um sticker animado com `!togif`
-
-**Outros (em desenvolvimento):**
+**Criação de Stickers:**
+- `!sticker` - Converte imagem ou vídeo em sticker (marque mídia ou envie com legenda)
+- `!fsticker` - Alternativa para criar sticker (marque foto)
 - `!ttp <texto>` - Texto para sticker estático
 - `!attp <texto>` - Texto para sticker animado
-- `!fsticker` - Foto para sticker (marque foto)
+
+**Conversão e Manipulação:**
+- `!toimg` - Sticker para imagem (marque sticker)
 - `!rename <nome/autor>` - Renomear sticker
 - `!qc` - Quote para sticker (marque mensagem)
 - `!brat <texto>` - Sticker estilo "brat"
 - `!bratvideo <texto>` - Vídeo estilo "brat"
 
-**Limites e Requisitos:**
-- Imagens: JPG, PNG, WebP (máx 5MB)
-- Vídeos/GIFs: MP4, GIF (máx 10 segundos, 5MB)
-- FFmpeg instalado (obrigatório para stickers animados)
-- Redimensionamento automático para 512x512 mantendo proporção
+**Recursos do Comando Sticker:**
+- ✅ Suporta imagens (JPG, PNG, WebP) - Convertidas para 512x512
+- ✅ Suporta vídeos curtos (MP4, GIF) - Máximo 10 segundos
+- ✅ Limite de tamanho: 5MB para vídeos
+- ✅ Mantém proporção da imagem original
+- ✅ Adiciona metadata automática (pack: "YURI BOT", author: "MAY0LPHI")
+- ✅ Mensagens de erro amigáveis em português
+
+**Como usar:**
+1. Envie uma imagem com a legenda `!sticker`
+2. Ou marque uma imagem/vídeo e digite `!sticker`
+3. Aguarde o processamento (vídeos podem levar alguns segundos)
+4. Receba seu sticker personalizado! 🎨
 
 ---
 
@@ -517,6 +519,53 @@ TETEEEE/
 - **Validação de Inputs**: Sanitização de dados de entrada
 - **Error Handling**: Tratamento defensivo de erros
 
+
+## 🧪 Testando o Bot
+
+### Testando Comandos de Sticker
+
+Após iniciar o bot, você pode testar a funcionalidade de stickers:
+
+**Teste 1: Imagem para Sticker Estático**
+1. Envie uma imagem para o bot em uma conversa privada ou grupo
+2. Adicione a legenda `!sticker` à imagem
+3. Aguarde alguns segundos
+4. O bot deve responder com um sticker da imagem
+
+**Teste 2: Reply/Marcar Imagem**
+1. Em uma conversa, alguém envia uma imagem
+2. Responda/marque essa imagem e digite `!sticker`
+3. O bot deve converter a imagem marcada em sticker
+
+**Teste 3: Vídeo/GIF para Sticker Animado**
+1. Envie um vídeo curto (menos de 10 segundos) ou GIF
+2. Adicione a legenda `!sticker` ou marque o vídeo e digite `!sticker`
+3. O bot deve converter em um sticker animado
+4. **Nota:** Certifique-se de que o FFmpeg está instalado
+
+**Teste 4: Validações**
+- Tente enviar `!sticker` sem mídia → Deve retornar mensagem de erro amigável
+- Tente com vídeo maior que 10 segundos → Deve avisar sobre duração máxima
+- Tente com arquivo maior que 5MB → Deve avisar sobre tamanho máximo
+
+**Teste 5: Menus**
+1. Digite `!menu` → Deve exibir menu principal com todas as categorias
+2. Digite `!figurinhas` → Deve exibir menu de comandos de stickers
+3. Digite `!efeitosimg` → Deve exibir menu de efeitos de imagem
+4. Digite `!outros` → Deve exibir menu de outros comandos
+
+### Logs Coloridos
+
+Ao executar o bot, você deve ver logs coloridos no console:
+- 🔵 **[INFO]** - Informações gerais
+- 🟢 **[SUCESSO]** - Operações bem-sucedidas
+- 🟡 **[AVISO]** - Avisos importantes
+- 🔴 **[ERRO]** - Erros que ocorreram
+- 🟣 **[COMANDO]** - Comandos executados pelos usuários
+- ⚪ **[DEBUG]** - Informações de depuração (quando debug=true)
+
+---
+
 ## 🐛 Troubleshooting
 
 ### Bot não conecta
@@ -542,6 +591,29 @@ TETEEEE/
 - Configure as chaves de API nos handlers correspondentes
 - Consulte a documentação de cada serviço
 
+### Stickers não funcionam
+
+**Imagens não convertem:**
+1. Verifique se a imagem está em formato válido (JPG, PNG, WebP)
+2. Verifique os logs para mensagens de erro específicas
+3. Certifique-se de que Jimp está instalado: `npm install jimp`
+
+**Vídeos não convertem (stickers animados):**
+1. Verifique se FFmpeg está instalado: `ffmpeg -version`
+2. Se não estiver, instale conforme instruções na seção Requisitos
+3. Verifique se o vídeo tem menos de 10 segundos
+4. Verifique se o arquivo tem menos de 5MB
+5. Formatos suportados: MP4, GIF, MOV
+
+**Mensagem "FFmpeg não encontrado":**
+- Instale o FFmpeg conforme instruções na seção de Requisitos
+- No Windows, certifique-se de adicionar FFmpeg ao PATH
+- Reinicie o terminal/prompt após instalar
+
+**Sticker fica pixelado:**
+- Use imagens de alta qualidade (mínimo 512x512 recomendado)
+- Evite imagens muito pequenas que serão ampliadas
+
 ## 🤝 Contribuindo
 
 Contribuições são bem-vindas! Para contribuir:
@@ -554,11 +626,14 @@ Contribuições são bem-vindas! Para contribuir:
 
 ## 📝 TODO / Roadmap
 
+- [x] ✅ Geração de stickers com manipulação avançada (imagens e vídeos)
+- [x] ✅ Sistema de menus completo com todas as categorias
+- [x] ✅ Logs coloridos e organizados no console
 - [ ] Implementar integrações de download (YouTube, TikTok, Instagram)
 - [ ] Adicionar suporte a OpenAI GPT
 - [ ] Sistema de economia completo (loja virtual, transações)
 - [ ] Jogos interativos funcionais (jogo da velha, forca, quiz)
-- [ ] Geração de stickers com manipulação avançada
+- [ ] Implementar comandos de efeitos de imagem (efeitosimg menu)
 - [ ] Sistema de traduções multi-idioma
 - [ ] Dashboard web para gerenciamento
 - [ ] Suporte a comandos por áudio

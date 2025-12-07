@@ -2,7 +2,7 @@ import { logger } from '../connect.js';
 import { groupDB, configDB } from '../utils/database.js';
 import { normalizeJid, isValidUrl, downloadFile } from '../utils/helpers.js';
 import * as menuHandlers from './menuHandlers.js';
-import { handleSticker, handleToImg, handleToGif } from '../commands/sticker.js';
+import { handleSticker as stickerHandler, handleFsticker as fstickerHandler } from '../commands/sticker.js';
 
 /**
  * Exporta todos os handlers de comandos do Hinokami Bot
@@ -45,6 +45,10 @@ export async function commandHandler(ctx) {
     menulogo: { handler: menuHandlers.handleMenuLogos },
     menucoins: { handler: menuHandlers.handleMenuCoins },
     modocoins: { handler: menuHandlers.handleMenuCoins },
+    efeitosimg: { handler: menuHandlers.handleMenuEfeitosImg },
+    menuefeitosimg: { handler: menuHandlers.handleMenuEfeitosImg },
+    outros: { handler: menuHandlers.handleMenuOutros },
+    menuoutros: { handler: menuHandlers.handleMenuOutros },
     
     // Admin commands
     ban: { handler: handleBan, requireAdmin: true, requireGroup: true },
@@ -79,7 +83,8 @@ export async function commandHandler(ctx) {
     ship: { handler: handleShip },
 
     // Tools (stubs)
-    sticker: { handler: handleSticker },
+    sticker: { handler: stickerHandler },
+    fsticker: { handler: fstickerHandler },
     toimg: { handler: handleToImg },
     togif: { handler: handleToGif },
     traduzir: { handler: handleTranslate, requireArgs: true },
@@ -444,8 +449,23 @@ async function handleShip(ctx) {
 }
 
 // ========== TOOLS COMMANDS (STUBS) ==========
+// Note: handleSticker and handleFsticker are now imported from ../commands/sticker.js
 
-// Sticker handlers are now imported from ../commands/sticker.js
+async function handleToImg(ctx) {
+  await sendReply(ctx,
+    `🖼️ *Sticker para Imagem*\n\n` +
+    `⚠️ TODO: Implementar conversão de sticker para imagem\n\n` +
+    `Responda um sticker com este comando.`
+  );
+}
+
+async function handleToGif(ctx) {
+  await sendReply(ctx,
+    `🎞️ *Sticker para GIF*\n\n` +
+    `⚠️ TODO: Implementar conversão de sticker animado para GIF\n\n` +
+    `Responda um sticker animado com este comando.`
+  );
+}
 
 async function handleTranslate(ctx) {
   await sendReply(ctx,

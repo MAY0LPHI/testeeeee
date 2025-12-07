@@ -1,272 +1,198 @@
+import { downloadMediaMessage } from 'whaileys';
+import fs from 'fs-extra';
+import path from 'path';
+import os from 'os';
+import { 
+  imageToWebp, 
+  videoToWebpAnimated, 
+  applyWebpMetadata,
+  checkFfmpegInstalled,
+  validateFileSize 
+} from '../utils/media.js';
+import { logError, logInfo } from '../utils/colorLogger.js';
+
 /**
- * Sticker Command Handler for Hinokami Bot
- * Supports static images and animated videos/GIFs
+ * Sticker command handler
+ * Converts images and videos to WhatsApp stickers
+ * Supports: direct image, replied image, video/GIF (≤10s, ≤5MB)
  */
 
-import {
-  imageToWebp,
-  videoToWebpAnimated,
-  applyWebpMetadata,
-  validateMediaType,
-  isSupportedImage,
-  isSupportedVideo,
-  getFileSizeMB
-} from '../utils/media.js';
-
 /**
- * Create sticker from image or video
- * Supports:
- * - Direct image attachment (static)
- * - Replied/quoted image (static)
- * - Direct video/GIF (animated, max 10s, 5MB)
- * - Replied/quoted video/GIF (animated)
- * 
+ * Main sticker handler
  * @param {Object} ctx - Command context
  */
 export async function handleSticker(ctx) {
-  const { sock, from, m, quoted, quotedMsg } = ctx;
-  
+  const { sock, m, reply, from, quotedMsg } = ctx;
+
   try {
-    // Determine if we're working with a direct message or quoted message
-    let targetMessage = m;
-    let hasQuoted = false;
-    
-    // Check if there's a quoted message
-    if (quoted) {
-      // Create a pseudo message object from quoted content
-      targetMessage = {
-        message: quoted
-      };
-      hasQuoted = true;
+    // Check if there's media attached or quoted
+    const messageType = Object.keys(m.message || {})[0];
+    let mediaMessage = null;
+    let isVideo = false;
+    let isImage = false;
+
+    // Check direct message media
+    if (messageType === 'imageMessage') {
+      mediaMessage = m.message.imageMessage;
+      isImage = true;
+    } else if (messageType === 'videoMessage') {
+      mediaMessage = m.message.videoMessage;
+      isVideo = true;
     }
-    
-    // Check if message has media
-    const messageType = Object.keys(targetMessage.message || {})[0];
-    
-    if (!messageType || (!targetMessage.message.imageMessage && !targetMessage.message.videoMessage && !targetMessage.message.stickerMessage)) {
-      return await sendReply(ctx, 
-        `🎨 *Como criar figurinhas* 🗡️\n\n` +
-        `📌 *Figurinha estática (imagem):*\n` +
-        `   • Envie uma imagem com ${ctx.prefix}sticker\n` +
-        `   • Ou responda uma imagem com ${ctx.prefix}sticker\n\n` +
-        `📌 *Figurinha animada (vídeo/GIF):*\n` +
-        `   • Envie um vídeo/GIF com ${ctx.prefix}sticker\n` +
-        `   • Ou responda um vídeo/GIF com ${ctx.prefix}sticker\n\n` +
-        `⚠️ *Limites:*\n` +
-        `   • Vídeos: máximo 10 segundos\n` +
-        `   • Tamanho: máximo 5MB\n\n` +
-        `🔥 _Respiração do Sol - Criação de Figurinhas!_`
+
+    // Check quoted/replied media
+    if (!mediaMessage && quotedMsg) {
+      const quotedType = Object.keys(quotedMsg.message || {})[0];
+      
+      if (quotedType === 'imageMessage') {
+        mediaMessage = quotedMsg.message.imageMessage;
+        isImage = true;
+      } else if (quotedType === 'videoMessage') {
+        mediaMessage = quotedMsg.message.videoMessage;
+        isVideo = true;
+      }
+    }
+
+    // No media found
+    if (!mediaMessage) {
+      await reply('❌ *Erro!* Envie uma imagem ou vídeo, ou marque uma mensagem com mídia usando o comando.\n\n📝 *Uso:*\n• Envie imagem com legenda: `!sticker`\n• Marque uma imagem/vídeo e digite: `!sticker`');
+      return;
+    }
+
+    // Notify user that processing has started
+    await reply('⏳ Processando seu sticker... Aguarde! 🎨');
+
+    // Create temp directory for processing
+    const tempDir = path.join(os.tmpdir(), 'stickers');
+    await fs.ensureDir(tempDir);
+
+    const timestamp = Date.now();
+    const inputFile = path.join(tempDir, `input_${timestamp}`);
+    const outputFile = path.join(tempDir, `sticker_${timestamp}.webp`);
+
+    try {
+      // Download media
+      logInfo('STICKER', 'Baixando mídia...');
+      const buffer = await downloadMediaMessage(
+        quotedMsg || m,
+        'buffer',
+        {},
+        { 
+          logger: console,
+          reuploadRequest: sock.updateMediaMessage
+        }
       );
+
+      if (!buffer || buffer.length === 0) {
+        throw new Error('Não foi possível baixar a mídia');
+      }
+
+      // Save buffer to temp file
+      await fs.writeFile(inputFile, buffer);
+
+      // Process based on media type
+      if (isImage) {
+        logInfo('STICKER', 'Convertendo imagem para sticker...');
+        
+        // Convert image to WebP
+        await imageToWebp(inputFile, outputFile);
+        
+        // Apply metadata
+        await applyWebpMetadata(outputFile, {
+          pack: 'YURI BOT',
+          author: 'MAY0LPHI'
+        });
+
+        // Send sticker
+        await sock.sendMessage(from, {
+          sticker: { url: outputFile }
+        }, { quoted: m });
+
+        logInfo('STICKER', 'Sticker de imagem criado com sucesso!');
+
+      } else if (isVideo) {
+        // Check if FFmpeg is installed
+        const ffmpegInstalled = await checkFfmpegInstalled();
+        if (!ffmpegInstalled) {
+          await reply('❌ *FFmpeg não encontrado!*\n\nPara criar stickers animados, é necessário instalar o FFmpeg.\n\n📦 *Instalação:*\n• Ubuntu/Debian: `sudo apt install ffmpeg`\n• Windows: Baixe em https://ffmpeg.org\n• macOS: `brew install ffmpeg`');
+          return;
+        }
+
+        logInfo('STICKER', 'Convertendo vídeo para sticker animado...');
+
+        // Validate file size before processing
+        const isValidSize = await validateFileSize(inputFile, 5);
+        if (!isValidSize) {
+          const stats = await fs.stat(inputFile);
+          const sizeMB = (stats.size / (1024 * 1024)).toFixed(2);
+          await reply(`❌ *Arquivo muito grande!*\n\nTamanho máximo: *5MB*\nSeu arquivo: *${sizeMB}MB*\n\n💡 Envie um vídeo menor ou mais curto.`);
+          return;
+        }
+
+        try {
+          // Convert video to animated WebP
+          await videoToWebpAnimated(inputFile, outputFile);
+          
+          // Apply metadata
+          await applyWebpMetadata(outputFile, {
+            pack: 'YURI BOT',
+            author: 'MAY0LPHI'
+          });
+
+          // Send sticker
+          await sock.sendMessage(from, {
+            sticker: { url: outputFile }
+          }, { quoted: m });
+
+          logInfo('STICKER', 'Sticker animado criado com sucesso!');
+
+        } catch (videoError) {
+          // Handle specific video conversion errors
+          if (videoError.message.includes('muito longo')) {
+            await reply(`❌ ${videoError.message}\n\n💡 Envie um vídeo de até 10 segundos.`);
+          } else if (videoError.message.includes('muito grande')) {
+            await reply(`❌ ${videoError.message}\n\n💡 Envie um arquivo menor.`);
+          } else {
+            await reply(`❌ *Erro ao converter vídeo!*\n\n${videoError.message}\n\n💡 Certifique-se de que o vídeo está em um formato válido (MP4, GIF, etc.).`);
+          }
+          logError('STICKER', videoError);
+          return;
+        }
+      }
+
+      // Success message with tips
+      await reply('✅ *Sticker criado com sucesso!* 🎨\n\n💡 *Dica:* Você pode usar stickers em conversas para se expressar melhor!');
+
+    } finally {
+      // Cleanup temp files
+      try {
+        if (await fs.pathExists(inputFile)) {
+          await fs.remove(inputFile);
+        }
+        if (await fs.pathExists(outputFile)) {
+          await fs.remove(outputFile);
+        }
+      } catch (cleanupError) {
+        logError('STICKER-CLEANUP', cleanupError);
+      }
     }
-    
-    // Send processing message
-    await sendReply(ctx, '⏳ Criando figurinha... Por favor aguarde! 🔥');
-    
-    // Handle image (static sticker)
-    if (targetMessage.message.imageMessage) {
-      await createStaticSticker(ctx, targetMessage, hasQuoted);
-    }
-    // Handle video/GIF (animated sticker)
-    else if (targetMessage.message.videoMessage) {
-      await createAnimatedSticker(ctx, targetMessage, hasQuoted);
-    }
-    // Handle sticker to image conversion
-    else if (targetMessage.message.stickerMessage) {
-      return await sendReply(ctx,
-        `ℹ️ Para converter figurinha em imagem, use:\n${ctx.prefix}toimg`
-      );
-    }
-    
+
   } catch (error) {
-    console.error('Erro no handler de sticker:', error);
+    logError('STICKER', error);
     
-    // User-friendly error messages in PT-BR
-    let errorMessage = '❌ Erro ao criar figurinha!';
-    
-    if (error.message.includes('muito longo')) {
-      errorMessage = `❌ ${error.message}\n\n💡 Tente um vídeo mais curto!`;
-    } else if (error.message.includes('muito grande')) {
-      errorMessage = `❌ ${error.message}\n\n💡 Tente comprimir o arquivo primeiro!`;
-    } else if (error.message.includes('formato não suportado')) {
-      errorMessage = `❌ ${error.message}\n\n💡 Formatos aceitos:\n• Imagens: JPG, PNG, WebP\n• Vídeos: MP4, GIF`;
-    } else {
-      errorMessage = `❌ Erro ao criar figurinha: ${error.message}`;
-    }
-    
-    await sendReply(ctx, errorMessage);
+    // Send friendly error message
+    await reply(`❌ *Erro ao criar sticker!*\n\n${error.message}\n\n💡 *Tente:*\n• Enviar uma imagem ou vídeo válido\n• Vídeos: máximo 10 segundos e 5MB\n• Formatos suportados: JPG, PNG, MP4, GIF`);
   }
 }
 
 /**
- * Create static sticker from image
- * @param {Object} ctx - Command context
- * @param {Object} message - Message containing image
- * @param {boolean} hasQuoted - Whether this is a quoted message
+ * Alias handlers for different sticker commands
  */
-async function createStaticSticker(ctx, message, hasQuoted = false) {
-  const { sock, from } = ctx;
-  
-  try {
-    // Download media using WhatsApp's downloadMediaMessage
-    const buffer = await sock.downloadMediaMessage(message);
-    
-    // Validate file type
-    const fileType = await validateMediaType(buffer);
-    if (!isSupportedImage(fileType?.mime)) {
-      throw new Error(`Formato não suportado: ${fileType?.mime || 'desconhecido'}. Use JPG, PNG ou WebP.`);
-    }
-    
-    // Check file size
-    const sizeMB = getFileSizeMB(buffer);
-    if (sizeMB > 5) {
-      throw new Error(`Arquivo muito grande! Máximo: 5MB. Tamanho atual: ${sizeMB.toFixed(2)}MB`);
-    }
-    
-    // Convert to WebP
-    let webpBuffer = await imageToWebp(buffer);
-    
-    // Apply metadata
-    webpBuffer = await applyWebpMetadata(webpBuffer);
-    
-    // Send sticker
-    await sock.sendMessage(from, {
-      sticker: webpBuffer
-    });
-    
-  } catch (error) {
-    throw error;
-  }
+export async function handleFsticker(ctx) {
+  return handleSticker(ctx);
 }
 
-/**
- * Create animated sticker from video/GIF
- * @param {Object} ctx - Command context
- * @param {Object} message - Message containing video
- * @param {boolean} hasQuoted - Whether this is a quoted message
- */
-async function createAnimatedSticker(ctx, message, hasQuoted = false) {
-  const { sock, from } = ctx;
-  
-  try {
-    // Download media using WhatsApp's downloadMediaMessage
-    const buffer = await sock.downloadMediaMessage(message);
-    
-    // Validate file type
-    const fileType = await validateMediaType(buffer);
-    if (!isSupportedVideo(fileType?.mime)) {
-      throw new Error(`Formato não suportado: ${fileType?.mime || 'desconhecido'}. Use MP4 ou GIF.`);
-    }
-    
-    // Check file size before processing
-    const sizeMB = getFileSizeMB(buffer);
-    if (sizeMB > 5) {
-      throw new Error(`Arquivo muito grande! Máximo: 5MB. Tamanho atual: ${sizeMB.toFixed(2)}MB`);
-    }
-    
-    // Convert to animated WebP
-    let webpBuffer = await videoToWebpAnimated(buffer);
-    
-    // Apply metadata
-    webpBuffer = await applyWebpMetadata(webpBuffer);
-    
-    // Send sticker
-    await sock.sendMessage(from, {
-      sticker: webpBuffer
-    });
-    
-  } catch (error) {
-    throw error;
-  }
-}
-
-/**
- * Helper function to send reply
- * @param {Object} ctx - Command context
- * @param {string} text - Reply text
- * @param {Object} options - Additional options
- */
-async function sendReply(ctx, text, options = {}) {
-  const { sock, from } = ctx;
-  return await sock.sendMessage(from, { text, ...options });
-}
-
-/**
- * Convert sticker to image
- * @param {Object} ctx - Command context
- */
-export async function handleToImg(ctx) {
-  const { sock, from, m, quoted } = ctx;
-  
-  try {
-    let targetMessage = m;
-    
-    if (quoted && quoted.stickerMessage) {
-      targetMessage = { message: quoted };
-    }
-    
-    if (!targetMessage.message?.stickerMessage) {
-      return await sendReply(ctx,
-        `🖼️ *Converter Figurinha para Imagem*\n\n` +
-        `📌 Responda uma figurinha com ${ctx.prefix}toimg\n\n` +
-        `🔥 _Respiração do Sol - Conversão de Mídia!_`
-      );
-    }
-    
-    await sendReply(ctx, '⏳ Convertendo figurinha para imagem...');
-    
-    // Download sticker
-    const buffer = await sock.downloadMediaMessage(targetMessage);
-    
-    // Send as image (WebP is already an image format, WhatsApp will handle it)
-    await sock.sendMessage(from, {
-      image: buffer,
-      caption: '✅ Figurinha convertida para imagem! 🗡️🔥'
-    });
-    
-  } catch (error) {
-    console.error('Erro ao converter sticker para imagem:', error);
-    await sendReply(ctx, `❌ Erro ao converter figurinha: ${error.message}`);
-  }
-}
-
-/**
- * Convert sticker to GIF
- * @param {Object} ctx - Command context
- */
-export async function handleToGif(ctx) {
-  const { sock, from, m, quoted } = ctx;
-  
-  try {
-    let targetMessage = m;
-    
-    if (quoted && quoted.stickerMessage) {
-      targetMessage = { message: quoted };
-    }
-    
-    if (!targetMessage.message?.stickerMessage) {
-      return await sendReply(ctx,
-        `🎞️ *Converter Figurinha para GIF*\n\n` +
-        `📌 Responda uma figurinha animada com ${ctx.prefix}togif\n\n` +
-        `🔥 _Respiração do Sol - Conversão de Mídia!_`
-      );
-    }
-    
-    await sendReply(ctx, '⏳ Convertendo figurinha para GIF...');
-    
-    // Download sticker
-    const buffer = await sock.downloadMediaMessage(targetMessage);
-    
-    // For now, send as video (GIF conversion requires additional ffmpeg processing)
-    // This can be enhanced later with actual GIF conversion
-    await sock.sendMessage(from, {
-      video: buffer,
-      gifPlayback: true,
-      caption: '✅ Figurinha convertida! 🗡️🔥'
-    });
-    
-  } catch (error) {
-    console.error('Erro ao converter sticker para GIF:', error);
-    await sendReply(ctx, `❌ Erro ao converter figurinha: ${error.message}`);
-  }
-}
-
+export default {
+  handleSticker,
+  handleFsticker
+};

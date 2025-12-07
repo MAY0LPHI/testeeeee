@@ -1,91 +1,60 @@
-/**
- * Media Utilities for Hinokami Bot
- * Handles media conversion for stickers (static and animated)
- */
-
 import Jimp from 'jimp';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs-extra';
-import path from 'path';
-import os from 'os';
-import { fileTypeFromBuffer } from 'file-type';
-import webp from 'node-webpmux';
+import { promisify } from 'util';
+import { exec } from 'child_process';
+import { Image } from 'node-webpmux';
 
-const execAsync = promisify(exec);
-
-// Constants
-const STICKER_SIZE = 512;
-const MAX_VIDEO_DURATION = 10; // seconds
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const STICKER_METADATA = {
-  pack: 'YURI BOT',
-  author: 'MAY0LPHI'
-};
+const execPromise = promisify(exec);
 
 /**
- * Convert static image to WebP format (512x512)
- * @param {Buffer} inputBuffer - Input image buffer
- * @returns {Promise<Buffer>} WebP image buffer
+ * Media utilities for sticker creation
+ * Handles image and video conversion to WebP format
  */
-export async function imageToWebp(inputBuffer) {
+
+/**
+ * Convert image to WebP format (512x512) maintaining aspect ratio
+ * @param {string} inputPath - Path to input image
+ * @param {string} outputPath - Path to output WebP file
+ * @returns {Promise<string>} - Path to output file
+ */
+export async function imageToWebp(inputPath, outputPath) {
   try {
-    // Read image with Jimp
-    const image = await Jimp.read(inputBuffer);
+    const image = await Jimp.read(inputPath);
     
-    // Get dimensions
+    // Get original dimensions
     const width = image.getWidth();
     const height = image.getHeight();
     
-    // Calculate resize dimensions maintaining aspect ratio
+    // Calculate scaling to fit within 512x512 while maintaining aspect ratio
+    const maxSize = 512;
     let newWidth, newHeight;
+    
     if (width > height) {
-      newWidth = STICKER_SIZE;
-      newHeight = Math.round((height / width) * STICKER_SIZE);
+      newWidth = maxSize;
+      newHeight = Math.round((height / width) * maxSize);
     } else {
-      newHeight = STICKER_SIZE;
-      newWidth = Math.round((width / height) * STICKER_SIZE);
+      newHeight = maxSize;
+      newWidth = Math.round((width / height) * maxSize);
     }
     
     // Resize image
-    image.resize(newWidth, newHeight, Jimp.RESIZE_BILINEAR);
+    image.resize(newWidth, newHeight);
     
-    // Create canvas with transparent background
-    const canvas = new Jimp(STICKER_SIZE, STICKER_SIZE, 0x00000000);
+    // Create a 512x512 canvas with transparent background
+    const canvas = new Jimp(maxSize, maxSize, 0x00000000);
     
-    // Center the image
-    const x = Math.round((STICKER_SIZE - newWidth) / 2);
-    const y = Math.round((STICKER_SIZE - newHeight) / 2);
+    // Calculate position to center the image
+    const x = Math.round((maxSize - newWidth) / 2);
+    const y = Math.round((maxSize - newHeight) / 2);
+    
+    // Composite the resized image onto the canvas
     canvas.composite(image, x, y);
     
-    // Convert to PNG first (Jimp doesn't directly support WebP)
-    // Then use ffmpeg for high-quality WebP conversion
-    const pngBuffer = await canvas.getBufferAsync('image/png');
+    // Write as WebP
+    await canvas.quality(90).writeAsync(outputPath);
     
-    // Use temporary files for ffmpeg conversion
-    const tempDir = os.tmpdir();
-    const tempInput = path.join(tempDir, `input_${Date.now()}.png`);
-    const tempOutput = path.join(tempDir, `output_${Date.now()}.webp`);
-    
-    try {
-      await fs.writeFile(tempInput, pngBuffer);
-      
-      // Convert to WebP using ffmpeg for better quality
-      await execAsync(`ffmpeg -i "${tempInput}" -vcodec libwebp -q:v 80 -preset default -loop 0 -an -vsync 0 "${tempOutput}"`);
-      
-      const outputBuffer = await fs.readFile(tempOutput);
-      
-      // Cleanup
-      await fs.unlink(tempInput);
-      await fs.unlink(tempOutput);
-      
-      return outputBuffer;
-    } catch (error) {
-      // Cleanup on error
-      await fs.unlink(tempInput).catch(() => {});
-      await fs.unlink(tempOutput).catch(() => {});
-      throw error;
-    }
+    return outputPath;
   } catch (error) {
     throw new Error(`Erro ao converter imagem para WebP: ${error.message}`);
   }
@@ -93,145 +62,136 @@ export async function imageToWebp(inputBuffer) {
 
 /**
  * Convert video/GIF to animated WebP sticker
- * @param {Buffer} inputBuffer - Input video/GIF buffer
- * @returns {Promise<Buffer>} Animated WebP buffer
+ * Limits: ≤10 seconds duration, ≤5MB file size
+ * @param {string} inputPath - Path to input video/GIF
+ * @param {string} outputPath - Path to output WebP file
+ * @returns {Promise<string>} - Path to output file
  */
-export async function videoToWebpAnimated(inputBuffer) {
-  const tempDir = os.tmpdir();
-  const tempInput = path.join(tempDir, `video_input_${Date.now()}.mp4`);
-  const tempOutput = path.join(tempDir, `video_output_${Date.now()}.webp`);
-  
-  try {
-    // Write input buffer to temp file
-    await fs.writeFile(tempInput, inputBuffer);
-    
-    // Check video duration
-    const { stdout: durationStr } = await execAsync(
-      `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${tempInput}"`
-    );
-    const duration = parseFloat(durationStr.trim());
-    
-    if (duration > MAX_VIDEO_DURATION) {
-      throw new Error(`Vídeo muito longo! Máximo permitido: ${MAX_VIDEO_DURATION} segundos. Duração atual: ${duration.toFixed(1)}s`);
-    }
-    
-    // Check file size
-    const stats = await fs.stat(tempInput);
-    if (stats.size > MAX_FILE_SIZE) {
-      const sizeMB = (stats.size / (1024 * 1024)).toFixed(2);
-      const maxMB = (MAX_FILE_SIZE / (1024 * 1024)).toFixed(0);
-      throw new Error(`Arquivo muito grande! Máximo permitido: ${maxMB}MB. Tamanho atual: ${sizeMB}MB`);
-    }
-    
-    // Convert to animated WebP sticker
-    // -vf scale: resize to 512x512 maintaining aspect ratio
-    // -vcodec libwebp: use WebP codec
-    // -lossless 0: lossy compression for smaller file size
-    // -q:v 90: quality (0-100, higher is better)
-    // -preset default: encoding preset
-    // -loop 0: infinite loop
-    // -an: no audio
-    // -vsync 0: passthrough timestamp
-    // -t: limit duration to MAX_VIDEO_DURATION
-    await execAsync(
-      `ffmpeg -i "${tempInput}" -vf "scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=0x00000000" ` +
-      `-vcodec libwebp -lossless 0 -q:v 90 -preset default -loop 0 -an -vsync 0 -t ${MAX_VIDEO_DURATION} "${tempOutput}"`
-    );
-    
-    // Read output
-    const outputBuffer = await fs.readFile(tempOutput);
-    
-    // Cleanup
-    await fs.unlink(tempInput);
-    await fs.unlink(tempOutput);
-    
-    return outputBuffer;
-  } catch (error) {
-    // Cleanup on error
-    await fs.unlink(tempInput).catch(() => {});
-    await fs.unlink(tempOutput).catch(() => {});
-    
-    if (error.message.includes('Vídeo muito longo') || error.message.includes('Arquivo muito grande')) {
-      throw error;
-    }
-    throw new Error(`Erro ao converter vídeo para WebP animado: ${error.message}`);
-  }
+export async function videoToWebpAnimated(inputPath, outputPath) {
+  return new Promise((resolve, reject) => {
+    // First check if ffmpeg is available
+    ffmpeg.getAvailableFormats((err) => {
+      if (err) {
+        return reject(new Error('FFmpeg não está instalado ou não foi encontrado no PATH. Instale o FFmpeg para criar stickers animados.'));
+      }
+
+      // Get video metadata
+      ffmpeg.ffprobe(inputPath, (probeErr, metadata) => {
+        if (probeErr) {
+          return reject(new Error(`Erro ao analisar vídeo: ${probeErr.message}`));
+        }
+
+        const duration = metadata.format.duration;
+        const fileSize = metadata.format.size;
+
+        // Validate duration (max 10 seconds)
+        if (duration > 10) {
+          return reject(new Error(`Vídeo muito longo! Duração máxima: 10 segundos. Seu vídeo tem ${duration.toFixed(1)} segundos.`));
+        }
+
+        // Validate file size (max 5MB)
+        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        if (fileSize > maxSize) {
+          return reject(new Error(`Arquivo muito grande! Tamanho máximo: 5MB. Seu arquivo tem ${(fileSize / (1024 * 1024)).toFixed(2)}MB.`));
+        }
+
+        // Convert to animated WebP
+        ffmpeg(inputPath)
+          .outputOptions([
+            '-vcodec libwebp',
+            '-vf scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=0x00000000',
+            '-loop 0',
+            '-preset default',
+            '-an',
+            '-vsync 0',
+            '-s 512:512'
+          ])
+          .toFormat('webp')
+          .on('error', (convertErr) => {
+            reject(new Error(`Erro ao converter vídeo para WebP animado: ${convertErr.message}`));
+          })
+          .on('end', () => {
+            resolve(outputPath);
+          })
+          .save(outputPath);
+      });
+    });
+  });
 }
 
 /**
  * Apply metadata to WebP sticker
- * @param {Buffer} webpBuffer - WebP sticker buffer
- * @param {Object} metadata - Metadata object (pack, author)
- * @returns {Promise<Buffer>} WebP buffer with metadata
+ * @param {string} webpPath - Path to WebP file
+ * @param {Object} metadata - Metadata object
+ * @param {string} metadata.pack - Sticker pack name (default: "YURI BOT")
+ * @param {string} metadata.author - Sticker author (default: "MAY0LPHI")
+ * @returns {Promise<void>}
  */
-export async function applyWebpMetadata(webpBuffer, metadata = STICKER_METADATA) {
+export async function applyWebpMetadata(webpPath, metadata = {}) {
   try {
-    // Create WebP image
-    const img = new webp.Image();
-    await img.load(webpBuffer);
-    
-    // Set EXIF metadata
+    const pack = metadata.pack || 'YURI BOT';
+    const author = metadata.author || 'MAY0LPHI';
+
+    // Read the WebP file
+    const img = new Image();
+    await img.load(webpPath);
+
+    // Create EXIF metadata
     const exif = {
-      'sticker-pack-id': 'com.yuri.bot.sticker',
-      'sticker-pack-name': metadata.pack || STICKER_METADATA.pack,
-      'sticker-pack-publisher': metadata.author || STICKER_METADATA.author,
+      'sticker-pack-id': 'com.snowcorp.stickerly.android.stickercontentprovider',
+      'sticker-pack-name': pack,
+      'sticker-pack-publisher': author,
+      'android-app-store-link': 'https://play.google.com/store/apps/details?id=com.marsvard.stickermakerforwhatsapp',
+      'ios-app-store-link': 'https://itunes.apple.com/app/sticker-maker-studio/id1443326857'
     };
-    
-    // Convert EXIF to JSON string
+
+    // Convert metadata to JSON string
     const exifStr = JSON.stringify(exif);
-    img.exif = Buffer.from(exifStr, 'utf-8');
     
-    // Save image with metadata
-    const outputBuffer = await img.save(null);
-    
-    return outputBuffer;
+    // Set EXIF data
+    img.exif = exifStr;
+
+    // Save the image with metadata
+    await img.save(webpPath);
   } catch (error) {
-    // If metadata application fails, return original buffer
-    // This is not critical, sticker will still work
-    console.warn('Aviso: Não foi possível aplicar metadata ao sticker:', error.message);
-    return webpBuffer;
+    // Metadata application is not critical, log but don't throw
+    console.warn(`Aviso: Não foi possível adicionar metadata ao sticker: ${error.message}`);
   }
 }
 
 /**
- * Validate media buffer type
- * @param {Buffer} buffer - Media buffer
- * @returns {Promise<Object>} File type info
+ * Check if FFmpeg is installed
+ * @returns {Promise<boolean>}
  */
-export async function validateMediaType(buffer) {
+export async function checkFfmpegInstalled() {
   try {
-    const type = await fileTypeFromBuffer(buffer);
-    return type;
+    await execPromise('ffmpeg -version');
+    return true;
   } catch (error) {
-    throw new Error('Não foi possível identificar o tipo de arquivo');
+    return false;
   }
 }
 
 /**
- * Check if media type is supported for static stickers
- * @param {string} mimeType - MIME type
- * @returns {boolean}
+ * Validate file size
+ * @param {string} filePath - Path to file
+ * @param {number} maxSizeMB - Maximum size in MB
+ * @returns {Promise<boolean>}
  */
-export function isSupportedImage(mimeType) {
-  const supportedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-  return supportedTypes.includes(mimeType);
+export async function validateFileSize(filePath, maxSizeMB = 5) {
+  try {
+    const stats = await fs.stat(filePath);
+    const fileSizeMB = stats.size / (1024 * 1024);
+    return fileSizeMB <= maxSizeMB;
+  } catch (error) {
+    throw new Error(`Erro ao verificar tamanho do arquivo: ${error.message}`);
+  }
 }
 
-/**
- * Check if media type is supported for animated stickers
- * @param {string} mimeType - MIME type
- * @returns {boolean}
- */
-export function isSupportedVideo(mimeType) {
-  const supportedTypes = ['video/mp4', 'video/mpeg', 'video/webm', 'image/gif'];
-  return supportedTypes.includes(mimeType);
-}
-
-/**
- * Get file size in MB
- * @param {Buffer} buffer - File buffer
- * @returns {number} Size in MB
- */
-export function getFileSizeMB(buffer) {
-  return buffer.length / (1024 * 1024);
-}
+export default {
+  imageToWebp,
+  videoToWebpAnimated,
+  applyWebpMetadata,
+  checkFfmpegInstalled,
+  validateFileSize
+};
