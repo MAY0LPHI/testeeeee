@@ -40,6 +40,7 @@ Todas as mensagens, menus e interações são temáticas do Tanjiro, incluindo:
 - **Node.js**: 20.0.0 ou superior
 - **NPM**: Instalado com Node.js
 - **WhatsApp**: Conta válida para autenticação
+- **FFmpeg**: Necessário para criação de stickers animados
 
 ## 🚀 Instalação
 
@@ -50,13 +51,38 @@ git clone https://github.com/MAY0LPHI/TETEEEE.git
 cd TETEEEE
 ```
 
-### 2. Instale as dependências
+### 2. Instale o FFmpeg
+
+O FFmpeg é necessário para conversão de vídeos/GIFs em stickers animados.
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install -y ffmpeg
+```
+
+**macOS:**
+```bash
+brew install ffmpeg
+```
+
+**Windows:**
+1. Baixe o FFmpeg de [ffmpeg.org](https://ffmpeg.org/download.html)
+2. Extraia e adicione ao PATH do sistema
+3. Ou use: `choco install ffmpeg` (com Chocolatey)
+
+**Verificar instalação:**
+```bash
+ffmpeg -version
+```
+
+### 3. Instale as dependências
 
 ```bash
 npm install
 ```
 
-### 3. Configure o bot
+### 4. Configure o bot
 
 ```bash
 npm run config:install
@@ -69,7 +95,7 @@ Você será guiado por um assistente interativo que irá:
 - Ajustar configurações de comportamento
 - Criar estrutura de banco de dados
 
-### 4. Inicie o bot
+### 5. Inicie o bot
 
 ```bash
 npm start
@@ -200,17 +226,35 @@ Downloads automáticos de múltiplas plataformas:
 
 #### 🎨 Figurinhas (Stickers)
 
-Criação e manipulação de stickers:
+Criação e manipulação de stickers (funcional com suporte a imagens estáticas e vídeos/GIFs animados):
 
+**Criar Stickers:**
+- `!sticker` - Converter imagem/vídeo para sticker
+  - Envie uma imagem com `!sticker` (estática)
+  - Envie um vídeo/GIF com `!sticker` (animada, max 10s/5MB)
+  - Ou responda (quote) uma imagem/vídeo com `!sticker`
+  - Metadata automático: pack="YURI BOT", author="MAY0LPHI"
+
+**Converter Stickers:**
+- `!toimg` - Converter sticker para imagem
+  - Responda um sticker com `!toimg`
+- `!togif` - Converter sticker animado para GIF/vídeo
+  - Responda um sticker animado com `!togif`
+
+**Outros (em desenvolvimento):**
 - `!ttp <texto>` - Texto para sticker estático
 - `!attp <texto>` - Texto para sticker animado
 - `!fsticker` - Foto para sticker (marque foto)
-- `!sticker` - Imagem/vídeo para sticker (marque mídia)
-- `!toimg` - Sticker para imagem (marque sticker)
 - `!rename <nome/autor>` - Renomear sticker
 - `!qc` - Quote para sticker (marque mensagem)
 - `!brat <texto>` - Sticker estilo "brat"
 - `!bratvideo <texto>` - Vídeo estilo "brat"
+
+**Limites e Requisitos:**
+- Imagens: JPG, PNG, WebP (máx 5MB)
+- Vídeos/GIFs: MP4, GIF (máx 10 segundos, 5MB)
+- FFmpeg instalado (obrigatório para stickers animados)
+- Redimensionamento automático para 512x512 mantendo proporção
 
 ---
 

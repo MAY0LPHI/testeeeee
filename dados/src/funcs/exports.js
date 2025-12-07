@@ -2,6 +2,7 @@ import { logger } from '../connect.js';
 import { groupDB, configDB } from '../utils/database.js';
 import { normalizeJid, isValidUrl, downloadFile } from '../utils/helpers.js';
 import * as menuHandlers from './menuHandlers.js';
+import { handleSticker, handleToImg, handleToGif } from '../commands/sticker.js';
 
 /**
  * Exporta todos os handlers de comandos do Hinokami Bot
@@ -444,29 +445,7 @@ async function handleShip(ctx) {
 
 // ========== TOOLS COMMANDS (STUBS) ==========
 
-async function handleSticker(ctx) {
-  await sendReply(ctx,
-    `🎨 *Criar Sticker*\n\n` +
-    `⚠️ TODO: Implementar conversão de imagem/vídeo para sticker\n\n` +
-    `Responda uma imagem ou vídeo com este comando.`
-  );
-}
-
-async function handleToImg(ctx) {
-  await sendReply(ctx,
-    `🖼️ *Sticker para Imagem*\n\n` +
-    `⚠️ TODO: Implementar conversão de sticker para imagem\n\n` +
-    `Responda um sticker com este comando.`
-  );
-}
-
-async function handleToGif(ctx) {
-  await sendReply(ctx,
-    `🎞️ *Sticker para GIF*\n\n` +
-    `⚠️ TODO: Implementar conversão de sticker animado para GIF\n\n` +
-    `Responda um sticker animado com este comando.`
-  );
-}
+// Sticker handlers are now imported from ../commands/sticker.js
 
 async function handleTranslate(ctx) {
   await sendReply(ctx,
