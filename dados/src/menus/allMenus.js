@@ -36,6 +36,7 @@ export function buildMenuPrincipal(sender, prefix, botName, ownerName) {
 ├ 🎨 ${prefix}figurinhas
 ├ 📊 ${prefix}informativos
 ├ 🎲 ${prefix}aleatorios
+├ 🔧 ${prefix}outros
 │
 ╰─────────────────
 
@@ -366,6 +367,54 @@ ${DIVIDER}
 💰 *Sistema de economia virtual!*`;
 }
 
+/**
+ * Build efeitosimg (image effects) menu
+ */
+export function buildMenuEfeitosImg(sender, prefix, botName, ownerName) {
+  return `┏╾ׁ═╼࡙ᷓ✿࡙╾ᷓ═╼֡͜❀⃘໋֢֓💧⃘໋ᩚ᳕֢֓❀֡͜╾═╼࡙ᷓ✿࡙╾ᷓ═╼┓
+┃֪࣪             ⁞֟፝⁞〫 𝐄𝐅𝐄𝐈𝐓𝐎𝐒 𝐈𝐌𝐀𝐆𝐄𝐌 ⁞֟፝⁞〫
+┗╾ׁ═┮✿࡙╾ᷓ═╼֡͜❀⃘໋֢֓💧⃘໋ᩚ᳕֢֓❀֡͜╾═╼࡙ᷓ✿࡙╾ᷓ═╼┛
+       ▭֟፝▬
+┏╾ׁ═┶✿࡙╾ᷓ═╼֡͜❀⃘໋֢֓💧⃘໋ᩚ᳕֢֓❀֡͜╾═╼࡙ᷓ✿࡙╾ᷓ═╼┓
+┣┬┈┅ֵֹ┈┅┈┅┈┅┈┅ֵֹ┈ֻֻ໋ࣼ𔗨᮫֪݁࠭  ⊹
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ผׁ࣭͚֟፝݁͞▱᳟  ${prefix}Blur (Marcar-img)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ผׁ࣭͚֟፝݁͞▱᳟  ${prefix}Espelho (Marcar-img)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ּׁ࣭͚֟፝݁͞▱᳟  ${prefix}Pixelar (Marcar-img)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ผׁ࣭͚֟፝݁͞▱᳟  ${prefix}Invertcolor (Marcar-img)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ּׁ࣭͚֟፝݁͞▱᳟  ${prefix}Sepia (Marcar-img)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ผׁ࣭͚֟፝݁͞▱᳟  ${prefix}Rotate (Marcar-img)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ּׁ࣭͚֟፝݁͞▱᳟  ${prefix}Vignette (Marcar-img)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ผׁ࣭͚֟፝݁͞▱᳟  ${prefix}Sharpen (Marcar-img)
+${SUB_DIVIDER}
+${DIVIDER}
+
+🎨 *Aplique efeitos incríveis em suas imagens!*`;
+}
+
+/**
+ * Build outros comandos (other commands) menu
+ */
+export function buildMenuOutros(sender, prefix, botName, ownerName) {
+  return `┏╾ׁ═╼࡙ᷓ✿࡙╾ᷓ═╼֡͜❀⃘໋֢֓💧⃘໋ᩚ᳕֢֓❀֡͜╾═╼࡙ᷓ✿࡙╾ᷓ═╼┓
+┃֪࣪             ⁞֟፝⁞〫 𝐎𝐔𝐓𝐑𝐎𝐒 𝐂𝐎𝐌𝐀𝐍𝐃𝐎𝐒 ⁞֟፝⁞〫
+┗╾ׁ═┮✿࡙╾ᷓ═╼֡͜❀⃘໋֢֓💧⃘໋ᩚ᳕֢֓❀֡͜╾═╼࡙ᷓ✿࡙╾ᷓ═╼┛
+       ▭֟፝▬
+┏╾ׁ═┶✿࡙╾ᷓ═╼֡͜❀⃘໋֢֓💧⃘໋ᩚ᳕֢֓❀֡͜╾═╼࡙ᷓ✿࡙╾ᷓ═╼┓
+┣┬┈┅ֵֹ┈┅┈┅┈┅┈┅ֵֹ┈ֻֻ໋ࣼ𔗨᮫֪݁࠭  ⊹
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ผׁ࣭͚֟፝݁͞▱᳟  ${prefix}Tomp3 (Marcar-vídeo)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ผׁ࣭͚֟፝݁͞▱᳟  ${prefix}Revelar (Marcar-view-once)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ּׁ࣭͚֟፝݁͞▱᳟  ${prefix}Getmusic (Marcar-vídeo)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ผׁ࣭͚֟፝݁͞▱᳟  ${prefix}Ocr (Marcar-img)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ּׁ࣭͚֟፝݁͞▱᳟  ${prefix}Removebg (Marcar-img)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ผׁ࣭͚֟፝݁͞▱᳟  ${prefix}Cep (Número)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ผׁ࣭͚֟፝݁͞▱᳟  ${prefix}Rastrear (Código)
+┃֪࣪├̟⊹ ͜💧̸̷̶᮫ּׁ࣭͚֟፝݁͞▱᳟  ${prefix}Cnpj (Número)
+${SUB_DIVIDER}
+${DIVIDER}
+
+🔧 *Comandos adicionais úteis!*`;
+}
+
 export default {
   buildMenuPrincipal,
   buildMenuDono,
@@ -378,5 +427,7 @@ export default {
   buildMenuInformativos,
   buildMenuBrincadeiras,
   buildMenuLogos,
-  buildMenuCoins
+  buildMenuCoins,
+  buildMenuEfeitosImg,
+  buildMenuOutros
 };

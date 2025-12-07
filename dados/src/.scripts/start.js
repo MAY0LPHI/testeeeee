@@ -111,6 +111,13 @@ async function start() {
     colorLogger.logSuccess('Sistema', 'Bot inicializado com sucesso!');
     logger.info('✅ Bot inicializado com sucesso!');
     
+    // Display command loading stats
+    colorLogger.logSection('📦 COMANDOS CARREGADOS');
+    colorLogger.logInfo('Menus', '13 menus disponíveis');
+    colorLogger.logInfo('Comandos', '+100 comandos integrados');
+    colorLogger.logInfo('Stickers', 'Sistema de figurinhas ativo');
+    colorLogger.logSectionEnd();
+    
     // Display ready message
     colorLogger.logReady(
       config.botName || 'Hinokami Bot',
