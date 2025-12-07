@@ -8,6 +8,7 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import fs from 'fs-extra';
 import path from 'path';
+import os from 'os';
 import { fileTypeFromBuffer } from 'file-type';
 import webp from 'node-webpmux';
 
@@ -57,16 +58,17 @@ export async function imageToWebp(inputBuffer) {
     const y = Math.round((STICKER_SIZE - newHeight) / 2);
     canvas.composite(image, x, y);
     
-    // Convert to WebP
-    const webpBuffer = await canvas.getBufferAsync('image/png');
+    // Convert to PNG first (Jimp doesn't directly support WebP)
+    // Then use ffmpeg for high-quality WebP conversion
+    const pngBuffer = await canvas.getBufferAsync('image/png');
     
-    // Use temporary files for conversion
-    const tempDir = '/tmp';
+    // Use temporary files for ffmpeg conversion
+    const tempDir = os.tmpdir();
     const tempInput = path.join(tempDir, `input_${Date.now()}.png`);
     const tempOutput = path.join(tempDir, `output_${Date.now()}.webp`);
     
     try {
-      await fs.writeFile(tempInput, webpBuffer);
+      await fs.writeFile(tempInput, pngBuffer);
       
       // Convert to WebP using ffmpeg for better quality
       await execAsync(`ffmpeg -i "${tempInput}" -vcodec libwebp -q:v 80 -preset default -loop 0 -an -vsync 0 "${tempOutput}"`);
@@ -95,7 +97,7 @@ export async function imageToWebp(inputBuffer) {
  * @returns {Promise<Buffer>} Animated WebP buffer
  */
 export async function videoToWebpAnimated(inputBuffer) {
-  const tempDir = '/tmp';
+  const tempDir = os.tmpdir();
   const tempInput = path.join(tempDir, `video_input_${Date.now()}.mp4`);
   const tempOutput = path.join(tempDir, `video_output_${Date.now()}.webp`);
   

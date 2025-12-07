@@ -107,17 +107,8 @@ async function createStaticSticker(ctx, message, hasQuoted = false) {
   const { sock, from } = ctx;
   
   try {
-    // For WhatsApp libraries, we need to download the media differently
-    // The message object structure depends on whether it's quoted or direct
-    let buffer;
-    
-    if (hasQuoted) {
-      // For quoted messages, download using the sock's downloadMediaMessage
-      buffer = await sock.downloadMediaMessage(message);
-    } else {
-      // For direct messages, also use downloadMediaMessage
-      buffer = await sock.downloadMediaMessage(message);
-    }
+    // Download media using WhatsApp's downloadMediaMessage
+    const buffer = await sock.downloadMediaMessage(message);
     
     // Validate file type
     const fileType = await validateMediaType(buffer);
@@ -157,14 +148,8 @@ async function createAnimatedSticker(ctx, message, hasQuoted = false) {
   const { sock, from } = ctx;
   
   try {
-    // Download video
-    let buffer;
-    
-    if (hasQuoted) {
-      buffer = await sock.downloadMediaMessage(message);
-    } else {
-      buffer = await sock.downloadMediaMessage(message);
-    }
+    // Download media using WhatsApp's downloadMediaMessage
+    const buffer = await sock.downloadMediaMessage(message);
     
     // Validate file type
     const fileType = await validateMediaType(buffer);
