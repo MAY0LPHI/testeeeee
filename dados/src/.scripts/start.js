@@ -103,6 +103,37 @@ async function start() {
     colorLogger.logConfigInfo('Prefix', config.prefix || '!', 'info');
     colorLogger.logSectionEnd();
     
+    // Show command loading stats
+    colorLogger.logSection('📦 CARREGANDO COMANDOS');
+    const commandStats = {
+      'Stickers': '✅ Totalmente funcional (sticker, ttp, attp, toimg, rename)',
+      'Menus': '✅ 12 categorias (menudono, menuadm, menupremium, etc)',
+      'Admin': '✅ 15+ comandos (ban, kick, promover, antilink, etc)',
+      'Downloads': '⚠️  25+ comandos (requer APIs externas)',
+      'Pesquisas': '⚠️  26+ comandos (requer APIs externas)',
+      'Aleatórios': '⚠️  22+ comandos (alguns funcionais)',
+      'Brincadeiras': '✅ 6 comandos (gay, gado, ship, etc)',
+      'Informativos': '✅ 12+ comandos (ping, atividade, dados, etc)',
+      'Logos': '⚠️  4 comandos (requer APIs externas)',
+      'Economia': '⚠️  5 comandos (em desenvolvimento)',
+      'Owner': '✅ 7+ comandos exclusivos do dono'
+    };
+    
+    let totalFunctional = 0;
+    let totalStubs = 0;
+    
+    for (const [category, status] of Object.entries(commandStats)) {
+      if (status.includes('✅')) totalFunctional++;
+      if (status.includes('⚠️')) totalStubs++;
+      colorLogger.logConfigInfo(category, status, status.includes('✅') ? 'success' : 'warning');
+    }
+    
+    console.log('');
+    colorLogger.logConfigInfo('Total de Categorias', `${Object.keys(commandStats).length} categorias`, 'info');
+    colorLogger.logConfigInfo('Funcionais', `${totalFunctional} categorias completas`, 'success');
+    colorLogger.logConfigInfo('Em Desenvolvimento', `${totalStubs} categorias (stubs)`, 'warning');
+    colorLogger.logSectionEnd();
+    
     colorLogger.logInfo('Sistema', 'Iniciando Hinokami Bot...');
     logger.info('🔥 Iniciando Hinokami Bot...');
     

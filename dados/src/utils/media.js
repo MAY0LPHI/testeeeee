@@ -5,7 +5,9 @@ import { existsSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { randomBytes } from 'crypto';
-import { Sticker } from 'node-webpmux';
+import webpmux from 'node-webpmux';
+
+const { Image: WebpImage } = webpmux;
 
 /**
  * Media utilities for sticker creation and manipulation
@@ -160,8 +162,19 @@ export async function videoToWebpAnimated(videoBuffer, maxDuration = 10) {
  */
 export async function applyWebpMetadata(webpBuffer, packName = 'YURI BOT', authorName = 'MAY0LPHI') {
   try {
-    const sticker = new Sticker(webpBuffer, { pack: packName, author: authorName });
-    return await sticker.build();
+    const img = new WebpImage();
+    await img.load(webpBuffer);
+    
+    // Set EXIF metadata for WhatsApp
+    const exifData = {
+      'sticker-pack-id': 'YURI_BOT_PACK',
+      'sticker-pack-name': packName,
+      'sticker-pack-publisher': authorName
+    };
+    
+    img.exif = exifData;
+    
+    return await img.save(null);
   } catch (error) {
     // If metadata fails, return original buffer
     console.warn('Aviso: Não foi possível adicionar metadata ao sticker:', error.message);
