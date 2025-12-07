@@ -287,7 +287,10 @@ export async function handleConsultarPremium(ctx) {
   const sender = m.key.participant || m.key.remoteJid;
   
   try {
-    const isPremium = userDB.isPremium(sender);
+    // Check if userDB exists and has isPremium method
+    const isPremium = userDB && typeof userDB.isPremium === 'function' 
+      ? userDB.isPremium(sender) 
+      : false;
     
     let response = `💎 *Status Premium*\n\n`;
     response += `👤 *Usuário:* @${sender.split('@')[0]}\n`;
@@ -307,6 +310,7 @@ export async function handleConsultarPremium(ctx) {
     logSuccess('InformativosHandler', 'Status premium consultado');
     
   } catch (error) {
+    logError('InformativosHandler', `Erro ao consultar: ${error.message}`);
     await sock.sendMessage(m.key.remoteJid, {
       text: `❌ Erro ao consultar: ${error.message}`
     }, { quoted: m });

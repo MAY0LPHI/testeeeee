@@ -25,7 +25,16 @@ export async function handleGoogleSearch(ctx) {
     const query = args.join(' ');
     logInfo('SearchHandler', `Buscando no Google: ${query}`);
     
-    const results = await googleIt({ query, limit: 5 });
+    // Timeout promise
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Timeout: busca excedeu 10 segundos')), 10000);
+    });
+    
+    // Search promise
+    const searchPromise = googleIt({ query, limit: 5 });
+    
+    // Race between timeout and search
+    const results = await Promise.race([searchPromise, timeoutPromise]);
     
     if (!results || results.length === 0) {
       await sock.sendMessage(m.key.remoteJid, {

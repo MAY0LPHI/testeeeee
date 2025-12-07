@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { downloadMediaMessage } from 'whaileys';
 import ffmpeg from 'fluent-ffmpeg';
 import Jimp from 'jimp';
@@ -19,14 +20,14 @@ const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_VIDEO_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_VIDEO_DURATION = 10; // segundos
 const STICKER_SIZE = 512; // pixels
+const FFMPEG_TIMEOUT = 30000; // 30 segundos
 
 /**
  * Gera nome de arquivo temporário único
  */
 function getTempFileName(ext) {
-  const randomId = Math.random().toString(36).substring(7);
-  const timestamp = Date.now();
-  return join(tmpdir(), `sticker_${timestamp}_${randomId}.${ext}`);
+  const uniqueId = randomUUID();
+  return join(tmpdir(), `sticker_${uniqueId}.${ext}`);
 }
 
 /**
@@ -73,6 +74,10 @@ async function resizeImage(inputBuffer) {
  */
 async function convertVideoToWebP(inputPath, outputPath) {
   return new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      reject(new Error('Timeout: processamento de vídeo excedeu 30 segundos'));
+    }, FFMPEG_TIMEOUT);
+    
     ffmpeg(inputPath)
       .outputOptions([
         '-vcodec', 'libwebp',
@@ -84,8 +89,14 @@ async function convertVideoToWebP(inputPath, outputPath) {
         '-s', `${STICKER_SIZE}:${STICKER_SIZE}`
       ])
       .toFormat('webp')
-      .on('end', () => resolve(outputPath))
-      .on('error', (err) => reject(new Error(`Erro no ffmpeg: ${err.message}`)))
+      .on('end', () => {
+        clearTimeout(timeoutId);
+        resolve(outputPath);
+      })
+      .on('error', (err) => {
+        clearTimeout(timeoutId);
+        reject(new Error(`Erro no ffmpeg: ${err.message}`));
+      })
       .save(outputPath);
   });
 }
@@ -94,13 +105,17 @@ async function convertVideoToWebP(inputPath, outputPath) {
  * Converte imagem para WebP
  */
 async function convertImageToWebP(inputBuffer, outputPath) {
-  try {
-    const resizedBuffer = await resizeImage(inputBuffer);
-    const tempPngPath = getTempFileName('png');
+  return new Promise(async (resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      reject(new Error('Timeout: processamento de imagem excedeu 30 segundos'));
+    }, FFMPEG_TIMEOUT);
     
-    await writeFile(tempPngPath, resizedBuffer);
-    
-    return new Promise((resolve, reject) => {
+    try {
+      const resizedBuffer = await resizeImage(inputBuffer);
+      const tempPngPath = getTempFileName('png');
+      
+      await writeFile(tempPngPath, resizedBuffer);
+      
       ffmpeg(tempPngPath)
         .outputOptions([
           '-vcodec', 'libwebp',
@@ -110,18 +125,21 @@ async function convertImageToWebP(inputBuffer, outputPath) {
         ])
         .toFormat('webp')
         .on('end', async () => {
+          clearTimeout(timeoutId);
           await removeTempFile(tempPngPath);
           resolve(outputPath);
         })
         .on('error', async (err) => {
+          clearTimeout(timeoutId);
           await removeTempFile(tempPngPath);
           reject(new Error(`Erro ao converter imagem: ${err.message}`));
         })
         .save(outputPath);
-    });
-  } catch (error) {
-    throw new Error(`Erro ao processar imagem: ${error.message}`);
-  }
+    } catch (error) {
+      clearTimeout(timeoutId);
+      reject(new Error(`Erro ao processar imagem: ${error.message}`));
+    }
+  });
 }
 
 /**

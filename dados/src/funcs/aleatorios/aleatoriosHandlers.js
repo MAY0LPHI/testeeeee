@@ -57,6 +57,7 @@ export async function handleCalcular(ctx) {
       return;
     }
     
+    // Sanitiza expressão removendo caracteres perigosos
     const expression = args.join(' ').replace(/[^0-9+\-*/().\s]/g, '');
     
     if (!expression) {
@@ -68,7 +69,9 @@ export async function handleCalcular(ctx) {
     
     logInfo('AleatoriosHandler', `Calculando: ${expression}`);
     
-    // Avalia a expressão de forma segura
+    // NOTE: Using Function() for eval is a security risk, but the input is heavily sanitized
+    // Only numeric characters and basic math operators are allowed
+    // TODO: Consider migrating to mathjs library for safer expression evaluation
     let result;
     try {
       result = Function(`'use strict'; return (${expression})`)();
@@ -255,7 +258,16 @@ export async function handleTinyURL(ctx) {
     
     logInfo('AleatoriosHandler', `Encurtando URL: ${url}`);
     
-    const response = await axios.get(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(url)}`);
+    // Timeout promise
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Timeout: serviço não respondeu em 10 segundos')), 10000);
+    });
+    
+    // Request promise
+    const requestPromise = axios.get(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(url)}`);
+    
+    // Race between timeout and request
+    const response = await Promise.race([requestPromise, timeoutPromise]);
     const shortUrl = response.data;
     
     let message = `🔗 *Encurtador de URL - TinyURL*\n\n`;
