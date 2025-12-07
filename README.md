@@ -40,14 +40,15 @@ Todas as mensagens, menus e interações são temáticas do Tanjiro, incluindo:
 - **Node.js**: 20.0.0 ou superior
 - **NPM**: Instalado com Node.js
 - **WhatsApp**: Conta válida para autenticação
+- **FFmpeg**: Necessário para stickers animados (opcional)
 
 ## 🚀 Instalação
 
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/MAY0LPHI/TETEEEE.git
-cd TETEEEE
+git clone https://github.com/MAY0LPHI/testeeeee.git
+cd testeeeee
 ```
 
 ### 2. Instale as dependências
@@ -56,7 +57,31 @@ cd TETEEEE
 npm install
 ```
 
-### 3. Configure o bot
+### 3. Instale o FFmpeg (Opcional - para stickers animados)
+
+O FFmpeg é necessário para criar stickers animados a partir de vídeos/GIFs.
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install ffmpeg
+```
+
+**Windows:**
+1. Baixe em: https://ffmpeg.org/download.html
+2. Extraia e adicione ao PATH do sistema
+
+**MacOS:**
+```bash
+brew install ffmpeg
+```
+
+**Verificar instalação:**
+```bash
+ffmpeg -version
+```
+
+### 4. Configure o bot
 
 ```bash
 npm run config:install
@@ -69,7 +94,7 @@ Você será guiado por um assistente interativo que irá:
 - Ajustar configurações de comportamento
 - Criar estrutura de banco de dados
 
-### 4. Inicie o bot
+### 5. Inicie o bot
 
 ```bash
 npm start
@@ -198,19 +223,47 @@ Downloads automáticos de múltiplas plataformas:
 
 ---
 
-#### 🎨 Figurinhas (Stickers)
+#### 🎨 Figurinhas (Stickers) - TOTALMENTE FUNCIONAL! ✅
 
-Criação e manipulação de stickers:
+Criação e manipulação de stickers - implementação completa:
 
+**Criar Stickers:**
+- `!sticker` - Converter imagem/vídeo para sticker (marque uma mídia)
+- `!fsticker` - Alias para sticker
+- `!s` - Alias curto para sticker
+- `!f` - Alias curto para fsticker
+
+**Características:**
+- ✅ **Imagens estáticas**: Converte para WebP 512x512
+- ✅ **Vídeos/GIFs**: Converte para sticker animado (até 10s)
+- ✅ **Aspect ratio**: Mantém proporção original
+- ✅ **Metadata**: Pack="YURI BOT", Author="MAY0LPHI"
+- ✅ **Limites**: Vídeos até 10s e 5MB
+
+**Como usar:**
+```
+1. Envie uma foto com legenda: !sticker
+2. Responda uma foto: !sticker
+3. Responda um vídeo/GIF: !sticker
+4. Envie vídeo com legenda: !sticker
+```
+
+**Texto para Sticker:**
 - `!ttp <texto>` - Texto para sticker estático
-- `!attp <texto>` - Texto para sticker animado
-- `!fsticker` - Foto para sticker (marque foto)
-- `!sticker` - Imagem/vídeo para sticker (marque mídia)
-- `!toimg` - Sticker para imagem (marque sticker)
-- `!rename <nome/autor>` - Renomear sticker
-- `!qc` - Quote para sticker (marque mensagem)
-- `!brat <texto>` - Sticker estilo "brat"
-- `!bratvideo <texto>` - Vídeo estilo "brat"
+- `!attp <texto>` - Texto para sticker animado (requer API)
+
+**Converter Sticker:**
+- `!toimg` - Converter sticker para imagem (marque um sticker)
+
+**Renomear Sticker:**
+- `!rename <pack>/<autor>` - Alterar metadata do sticker
+  - Exemplo: `!rename Meu Pack/Meu Nome`
+
+**Observações:**
+- 📦 Stickers estáticos funcionam sem dependências extras
+- 🎬 Stickers animados requerem FFmpeg instalado
+- ⚡ Conversão rápida e eficiente
+- 🎨 Metadata personalizada automática
 
 ---
 
@@ -413,51 +466,117 @@ Muitos comandos possuem aliases (nomes alternativos):
 
 ### APIs Externas (Opcional)
 
-Alguns recursos requerem chaves de API externas:
+Muitos comandos avançados requerem integração com APIs externas. O bot funciona sem elas, mas com funcionalidades limitadas.
 
-#### Downloads
-- **YouTube**: Considere usar `ytdl-core` ou APIs como `y2mate`
+#### 🔧 Como Configurar APIs
+
+**Método 1: Variáveis de Ambiente**
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+# YouTube Download APIs
+YTDL_API_KEY=sua_chave_aqui
+YTDL_API_URL=https://api.exemplo.com
+
+# OpenAI GPT
+OPENAI_API_KEY=sk-...
+
+# Stickers de Texto
+TTP_API_KEY=sua_chave
+ATTP_API_URL=https://api.exemplo.com/attp
+
+# Outros serviços
+NASA_API_KEY=sua_chave_nasa
+WEATHER_API_KEY=sua_chave_clima
+SIMSIMI_API_KEY=sua_chave_simsimi
+```
+
+**Método 2: Arquivo de Credenciais**
+
+Crie `dados/settings/creds.json`:
+
+```json
+{
+  "apis": {
+    "youtube": {
+      "key": "sua_chave",
+      "url": "https://api.exemplo.com"
+    },
+    "openai": {
+      "key": "sk-...",
+      "model": "gpt-3.5-turbo"
+    },
+    "tiktok": {
+      "key": "sua_chave"
+    }
+  }
+}
+```
+
+#### 📋 APIs Recomendadas
+
+**Downloads:**
+- **YouTube**: `ytdl-core` (biblioteca) ou APIs como y2mate, savefrom
 - **TikTok**: APIs de scraping como `tiktok-scraper`
 - **Instagram**: `instagram-scraper` ou APIs similares
+- **Spotify**: `spotify-downloader` ou APIs de terceiros
 
-#### IA
-- **OpenAI GPT**: Registre-se em [OpenAI](https://openai.com) e obtenha uma API key
-- **Geração de Imagens**: DALL-E, Midjourney, Stable Diffusion
+**Inteligência Artificial:**
+- **OpenAI GPT**: https://platform.openai.com/api-keys
+- **SimSimi**: https://workshop.simsimi.com/
 
-Configure as chaves em variáveis de ambiente ou no código dos handlers correspondentes (marcados com `TODO`).
+**Informações:**
+- **NASA**: https://api.nasa.gov/ (gratuito)
+- **OpenWeather**: https://openweathermap.org/api (gratuito)
+- **OMDb (filmes)**: https://www.omdbapi.com/ (gratuito)
+
+**Stickers:**
+- **TTP/ATTP**: APIs como lolhuman.xyz, zacros.my.id
+
+#### ⚠️ Comandos sem API
+
+Se uma API não estiver configurada, o comando retornará uma mensagem informativa:
+
+```
+⚠️ Recurso X necessita de configuração.
+Defina a variável de ambiente Y ou verifique ./settings/creds.json.
+```
+
+Isso permite que você configure apenas as APIs que realmente precisa!
 
 ## 🗂️ Estrutura do Projeto
 
 ```
-TETEEEE/
+testeeeee/
 ├── package.json                 # Dependências e scripts
 ├── README.md                    # Este arquivo
 ├── dados/
-│   ├── database/                # Banco de dados JSON
-│   │   ├── grupos/              # Dados de grupos
-│   │   ├── dono/                # Dados do dono
+│   ├── database/                # Banco de dados JSON (criado automaticamente)
 │   │   ├── grupos.json          # BD de grupos
 │   │   ├── usuarios.json        # BD de usuários
 │   │   └── config_db.json       # Configuração do BD
 │   ├── midias/                  # Arquivos de mídia
-│   │   └── menu.jpg             # Imagem do menu
-│   ├── session/                 # Sessão do WhatsApp
+│   ├── session/                 # Sessão do WhatsApp (auto-gerada)
 │   └── src/                     # Código-fonte
 │       ├── .scripts/            # Scripts de execução
 │       │   ├── config.js        # Configuração interativa
 │       │   ├── start.js         # Inicialização
 │       │   └── update.js        # Atualização
+│       ├── commands/            # ✨ Handlers de comandos específicos
+│       │   └── sticker.js       # 🎨 Sistema de stickers completo
 │       ├── funcs/               # Funções de comandos
-│       │   ├── downloads/       # Handlers de download
-│       │   ├── private/         # Funções privadas
-│       │   ├── utils/           # Utilitários
-│       │   └── exports.js       # Handler principal de comandos
+│       │   ├── exports.js       # Handler principal de comandos
+│       │   └── menuHandlers.js  # Handlers de menus
 │       ├── menus/               # Sistema de menus
 │       │   ├── index.js         # Exportador de menus
-│       │   └── menu.js          # Construtores de menus
+│       │   ├── menu.js          # Construtores de menus
+│       │   └── allMenus.js      # Todos os menus disponíveis
 │       ├── utils/               # Utilitários gerais
+│       │   ├── colorLogger.js   # 🎨 Logs coloridos
 │       │   ├── database.js      # Sistema de BD
 │       │   ├── helpers.js       # Funções auxiliares
+│       │   ├── media.js         # 🎬 Conversão de mídia (stickers)
 │       │   └── paths.js         # Caminhos do projeto
 │       ├── config.json          # Configuração principal
 │       ├── connect.js           # Lógica de conexão WA
@@ -498,6 +617,103 @@ TETEEEE/
 - Configure as chaves de API nos handlers correspondentes
 - Consulte a documentação de cada serviço
 
+## 🧪 Testando o Bot
+
+### Testes Básicos
+
+**1. Teste de Conexão:**
+```bash
+npm start
+```
+Verifique se o bot conecta e exibe o banner colorido.
+
+**2. Teste de Comandos Básicos:**
+
+No WhatsApp, envie:
+- `!menu` - Ver menu principal
+- `!ping` - Testar latência
+- `!status` - Ver status do bot
+
+### Testando Stickers (Funcionalidade Completa)
+
+**Sticker de Imagem:**
+1. Envie uma foto no grupo/privado
+2. Com legenda: `!sticker`
+3. Ou responda a foto com: `!sticker`
+4. ✅ Deve retornar um sticker estático
+
+**Sticker de Vídeo/GIF:**
+1. Envie um vídeo curto (até 10s)
+2. Com legenda: `!sticker`
+3. ✅ Deve retornar um sticker animado
+4. ⚠️ Requer FFmpeg instalado
+
+**Converter Sticker para Imagem:**
+1. Envie um sticker
+2. Responda com: `!toimg`
+3. ✅ Deve retornar a imagem PNG
+
+**Renomear Sticker:**
+1. Envie um sticker
+2. Responda com: `!rename Meu Pack/Meu Nome`
+3. ✅ Deve retornar sticker com nova metadata
+
+**Texto para Sticker:**
+1. Digite: `!ttp Olá Mundo`
+2. ✅ Deve criar sticker com texto
+3. (Para ATTP, configure API externa)
+
+### Testando Outros Comandos
+
+**Comandos de Admin (em grupos):**
+- `!ban @usuario` - Banir membro (precisa ser admin)
+- `!antilink on` - Ativar antilink
+
+**Comandos de Diversão:**
+- `!gay @usuario` - Medidor gay
+- `!ship @user1 @user2` - Compatibilidade
+
+**Comandos Informativos:**
+- `!atividade` - Ver atividade do bot
+- `!dados` - Estatísticas
+
+### Logs e Debugging
+
+O bot exibe logs coloridos no console:
+- 🟦 **INFO**: Informações gerais
+- 🟩 **SUCESSO**: Operações bem-sucedidas
+- 🟨 **AVISO**: Alertas
+- 🟥 **ERRO**: Erros encontrados
+- 🟦 **COMANDO**: Comandos executados
+- ⚪ **MENSAGEM**: Mensagens recebidas
+
+**Ativar modo debug:**
+
+Edite `dados/src/config.json`:
+```json
+{
+  "debug": true
+}
+```
+
+### Troubleshooting de Stickers
+
+**Erro: "FFmpeg não está instalado"**
+- Instale FFmpeg: `sudo apt-get install ffmpeg`
+- Verifique: `ffmpeg -version`
+
+**Erro: "Vídeo muito longo"**
+- Limite: 10 segundos
+- Corte o vídeo antes de enviar
+
+**Erro: "Arquivo muito grande"**
+- Limite: 5 MB para vídeos
+- Comprima o arquivo antes
+
+**Sticker sai distorcido:**
+- ✅ Não deveria - o sistema mantém aspect ratio
+- Se ocorrer, reporte como bug
+
 ## 🤝 Contribuindo
 
 Contribuições são bem-vindas! Para contribuir:
@@ -510,16 +726,35 @@ Contribuições são bem-vindas! Para contribuir:
 
 ## 📝 TODO / Roadmap
 
+### ✅ Concluído
+- [x] ~~Geração de stickers com manipulação avançada~~ (Implementado!)
+  - [x] Stickers estáticos (imagem para WebP)
+  - [x] Stickers animados (vídeo/GIF para WebP)
+  - [x] Conversão sticker para imagem
+  - [x] Rename de metadata
+  - [x] Suporte a aspect ratio
+- [x] Sistema de menus completo
+- [x] Logs coloridos e organizados
+- [x] Sistema de comandos modular
+- [x] Rate limiting e cooldowns
+- [x] Sistema de permissões (Owner/Admin/Mod)
+- [x] Anti-spam e anti-delete
+
+### 🚧 Em Desenvolvimento
 - [ ] Implementar integrações de download (YouTube, TikTok, Instagram)
 - [ ] Adicionar suporte a OpenAI GPT
 - [ ] Sistema de economia completo (loja virtual, transações)
 - [ ] Jogos interativos funcionais (jogo da velha, forca, quiz)
-- [ ] Geração de stickers com manipulação avançada
 - [ ] Sistema de traduções multi-idioma
+- [ ] TTP/ATTP com APIs externas
+
+### 🔮 Planejado
 - [ ] Dashboard web para gerenciamento
 - [ ] Suporte a comandos por áudio
 - [ ] Sistema de backup automático na nuvem
 - [ ] Métricas e analytics de uso
+- [ ] Sistema de plugins
+- [ ] API REST para integração externa
 
 ## 📄 Licença
 
