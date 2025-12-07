@@ -95,6 +95,14 @@ process.on('SIGTERM', () => {
 // Iniciar bot
 async function start() {
   try {
+    colorLogger.logSection('🚀 INICIALIZAÇÃO');
+    colorLogger.logConfigInfo('Node.js', process.version, 'success');
+    colorLogger.logConfigInfo('Bot Name', config.botName || 'Hinokami Bot', 'info');
+    colorLogger.logConfigInfo('Owner', config.ownerNumber || 'Não configurado', 
+      config.ownerNumber?.includes('XXX') ? 'warning' : 'success');
+    colorLogger.logConfigInfo('Prefix', config.prefix || '!', 'info');
+    colorLogger.logSectionEnd();
+    
     colorLogger.logInfo('Sistema', 'Iniciando Hinokami Bot...');
     logger.info('🔥 Iniciando Hinokami Bot...');
     
@@ -102,6 +110,13 @@ async function start() {
     
     colorLogger.logSuccess('Sistema', 'Bot inicializado com sucesso!');
     logger.info('✅ Bot inicializado com sucesso!');
+    
+    // Display ready message
+    colorLogger.logReady(
+      config.botName || 'Hinokami Bot',
+      config.ownerNumber || 'Não configurado',
+      config.prefix || '!'
+    );
     
     // Keep process alive - the bot will run continuously
     // Heartbeat could be added here for monitoring if needed

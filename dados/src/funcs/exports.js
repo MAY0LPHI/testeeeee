@@ -1,6 +1,7 @@
 import { logger } from '../connect.js';
 import { groupDB, configDB } from '../utils/database.js';
 import { normalizeJid, isValidUrl, downloadFile } from '../utils/helpers.js';
+import * as menuHandlers from './menuHandlers.js';
 
 /**
  * Exporta todos os handlers de comandos do Hinokami Bot
@@ -15,6 +16,35 @@ export async function commandHandler(ctx) {
 
   // Mapa de comandos por categoria
   const commandMap = {
+    // Menu commands
+    menu: { handler: menuHandlers.handleMenuPrincipal },
+    menuprincipal: { handler: menuHandlers.handleMenuPrincipal },
+    menudono: { handler: menuHandlers.handleMenuDono },
+    donomenu: { handler: menuHandlers.handleMenuDono },
+    menuadm: { handler: menuHandlers.handleMenuAdm },
+    menuadms: { handler: menuHandlers.handleMenuAdm },
+    adm: { handler: menuHandlers.handleMenuAdm },
+    menupremium: { handler: menuHandlers.handleMenuPremium },
+    menuprem: { handler: menuHandlers.handleMenuPremium },
+    menudownloads: { handler: menuHandlers.handleMenuDownloads },
+    menudown: { handler: menuHandlers.handleMenuDownloads },
+    download: { handler: menuHandlers.handleMenuDownloads },
+    figurinhas: { handler: menuHandlers.handleMenuFigurinhas },
+    menufigurinhas: { handler: menuHandlers.handleMenuFigurinhas },
+    pesquisas: { handler: menuHandlers.handleMenuPesquisas },
+    menupesquisas: { handler: menuHandlers.handleMenuPesquisas },
+    aleatorios: { handler: menuHandlers.handleMenuAleatorios },
+    menualeatorios: { handler: menuHandlers.handleMenuAleatorios },
+    informativos: { handler: menuHandlers.handleMenuInformativos },
+    menuinformativos: { handler: menuHandlers.handleMenuInformativos },
+    brincadeiras: { handler: menuHandlers.handleMenuBrincadeiras },
+    brincadeira: { handler: menuHandlers.handleMenuBrincadeiras },
+    logos: { handler: menuHandlers.handleMenuLogos },
+    menulogos: { handler: menuHandlers.handleMenuLogos },
+    menulogo: { handler: menuHandlers.handleMenuLogos },
+    menucoins: { handler: menuHandlers.handleMenuCoins },
+    modocoins: { handler: menuHandlers.handleMenuCoins },
+    
     // Admin commands
     ban: { handler: handleBan, requireAdmin: true, requireGroup: true },
     kick: { handler: handleKick, requireAdmin: true, requireGroup: true },
