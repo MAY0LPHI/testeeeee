@@ -108,6 +108,36 @@ Na primeira execução, um **QR Code** será exibido. Escaneie-o com seu WhatsAp
 
 **Método alternativo**: Use pareamento por código (pair code) editando o script de conexão.
 
+## 🧪 Testando o Bot
+
+Após conectar o bot, você pode testar os principais comandos:
+
+### Testando Menus
+```
+!menu              # Menu principal com todas as categorias
+!figurinhas        # Menu de comandos de stickers
+!menudownloads     # Menu de downloads
+```
+
+### Testando Stickers
+
+**Sticker de Imagem (estático):**
+1. Envie uma imagem para o bot ou grupo
+2. Responda à imagem com `!sticker`
+3. Ou envie uma imagem com a legenda `!sticker`
+4. Aguarde o processamento e receba seu sticker! 🎨
+
+**Sticker de Vídeo (animado):**
+1. Envie um vídeo curto (≤10 segundos, ≤5MB)
+2. Responda ao vídeo com `!sticker`
+3. Aguarde o processamento (pode levar alguns segundos)
+4. Receba seu sticker animado! 🎬
+
+**Verificando logs no console:**
+- Observe os logs coloridos com prefixos `[INIT]`, `[CONN]`, `[CMD]`, `[ERR]`
+- Os logs mostram cada etapa do processamento de stickers
+- Erros são exibidos em vermelho com mensagens claras
+
 ## 📚 Comandos Disponíveis
 
 ### NPM Scripts

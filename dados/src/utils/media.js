@@ -3,8 +3,9 @@ import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs-extra';
 import { promisify } from 'util';
 import { exec } from 'child_process';
-import { Image } from 'node-webpmux';
+import pkg from 'node-webpmux';
 
+const { Image } = pkg;
 const execPromise = promisify(exec);
 
 /**
