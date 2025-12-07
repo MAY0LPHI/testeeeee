@@ -223,27 +223,25 @@ export async function getVideoDuration(filePath) {
  * @returns {boolean} True if video/GIF
  */
 export function isVideoOrGif(buffer) {
-  // Check magic numbers for common video formats
-  const magicNumbers = {
-    // MP4
-    mp4: [0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70],
-    // GIF
-    gif: [0x47, 0x49, 0x46, 0x38],
-    // WebM
-    webm: [0x1A, 0x45, 0xDF, 0xA3],
+  // Magic number constants for video format detection
+  const VIDEO_SIGNATURES = {
+    GIF: [0x47, 0x49, 0x46, 0x38], // 'GIF8'
+    MP4_FTYP: '667479' // hex for 'ftyp' in MP4/MOV/M4V containers
   };
 
-  // Check GIF
-  if (buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46) {
+  // Check GIF signature (47 49 46 = 'GIF')
+  if (buffer[0] === VIDEO_SIGNATURES.GIF[0] && 
+      buffer[1] === VIDEO_SIGNATURES.GIF[1] && 
+      buffer[2] === VIDEO_SIGNATURES.GIF[2]) {
     return true;
   }
 
-  // Check MP4/MOV/M4V
-  if (buffer.slice(4, 12).toString('hex').includes('667479')) {
+  // Check MP4/MOV/M4V (looks for 'ftyp' box identifier)
+  if (buffer.slice(4, 12).toString('hex').includes(VIDEO_SIGNATURES.MP4_FTYP)) {
     return true;
   }
 
-  // Check WebM
+  // Check WebM signature (1A 45 DF A3)
   if (buffer[0] === 0x1A && buffer[1] === 0x45) {
     return true;
   }

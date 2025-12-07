@@ -176,7 +176,9 @@ export async function handleTtp(ctx) {
     }, { quoted: m });
     
     // Use external API for text-to-image
-    const apiUrl = `https://api.lolhuman.xyz/api/ttp?apikey=GataDios&text=${encodeURIComponent(text)}`;
+    // SECURITY NOTE: Use environment variable for API key in production
+    const apiKey = process.env.TTP_API_KEY || 'GataDios'; // Default for demo only
+    const apiUrl = `https://api.lolhuman.xyz/api/ttp?apikey=${apiKey}&text=${encodeURIComponent(text)}`;
     const response = await axios.get(apiUrl, { responseType: 'arraybuffer' });
     const imageBuffer = Buffer.from(response.data);
     
@@ -218,7 +220,9 @@ export async function handleAttp(ctx) {
     }, { quoted: m });
     
     // Use external API for animated text
-    const apiUrl = `https://api.lolhuman.xyz/api/attp?apikey=GataDios&text=${encodeURIComponent(text)}`;
+    // SECURITY NOTE: Use environment variable for API key in production
+    const apiKey = process.env.ATTP_API_KEY || 'GataDios'; // Default for demo only
+    const apiUrl = `https://api.lolhuman.xyz/api/attp?apikey=${apiKey}&text=${encodeURIComponent(text)}`;
     const response = await axios.get(apiUrl, { responseType: 'arraybuffer' });
     const webpBuffer = Buffer.from(response.data);
     

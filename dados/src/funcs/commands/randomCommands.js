@@ -443,7 +443,7 @@ export async function handleDestrava2(ctx) {
 }
 
 /**
- * Generate CPF
+ * Generate CPF (FOR TESTING/DEMO PURPOSES ONLY)
  */
 export async function handleGeracpf(ctx) {
   const { sock, from, m } = ctx;
@@ -457,8 +457,12 @@ export async function handleGeracpf(ctx) {
   await sock.sendMessage(from, {
     text: `🆔 *CPF GERADO (FICTÍCIO)*\n\n` +
           `📄 ${randomCPF()}\n\n` +
-          `⚠️ *ATENÇÃO:* Este é um CPF fictício apenas para demonstração.\n` +
-          `Não use para fins ilegais!`
+          `⚠️ *ATENÇÃO IMPORTANTE:*\n` +
+          `• Este é um CPF FICTÍCIO apenas para demonstração/testes\n` +
+          `• NÃO use para fins legais ou cadastros reais\n` +
+          `• O uso indevido pode constituir crime\n` +
+          `• Apenas para desenvolvimento/testes de sistemas\n\n` +
+          `🚨 O desenvolvedor não se responsabiliza pelo uso inadequado desta funcionalidade!`
   }, { quoted: m });
 }
 
