@@ -185,15 +185,105 @@ export function logSeparator() {
 }
 
 /**
- * Banner inicial do bot
+ * Banner inicial do bot - ENHANCED
  */
 export function logBanner() {
-  console.log('\n' + chalk.cyan('╔════════════════════════════════════════╗'));
-  console.log(chalk.cyan('║') + chalk.bold.red('     🗡️  HINOKAMI BOT - TANJIRO  🔥     ') + chalk.cyan('║'));
-  console.log(chalk.cyan('║') + '                                        ' + chalk.cyan('║'));
-  console.log(chalk.cyan('║') + chalk.yellow('   Respiração do Sol - Forma Inicial    ') + chalk.cyan('║'));
-  console.log(chalk.cyan('║') + '                                        ' + chalk.cyan('║'));
-  console.log(chalk.cyan('╚════════════════════════════════════════╝') + '\n');
+  console.clear();
+  console.log('\n');
+  console.log(chalk.bold.cyan('┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓'));
+  console.log(chalk.bold.cyan('┃') + '                                                      ' + chalk.bold.cyan('┃'));
+  console.log(chalk.bold.cyan('┃') + chalk.bold.red('        🗡️  HINOKAMI BOT - TANJIRO  🔥            ') + chalk.bold.cyan('┃'));
+  console.log(chalk.bold.cyan('┃') + '                                                      ' + chalk.bold.cyan('┃'));
+  console.log(chalk.bold.cyan('┃') + chalk.bold.yellow('         Respiração do Sol Ativada ⚔️               ') + chalk.bold.cyan('┃'));
+  console.log(chalk.bold.cyan('┃') + '                                                      ' + chalk.bold.cyan('┃'));
+  console.log(chalk.bold.cyan('┃') + chalk.gray('    Bot WhatsApp com +100 comandos integrados      ') + chalk.bold.cyan('┃'));
+  console.log(chalk.bold.cyan('┃') + chalk.gray('    Desenvolvido com determinação e força          ') + chalk.bold.cyan('┃'));
+  console.log(chalk.bold.cyan('┃') + '                                                      ' + chalk.bold.cyan('┃'));
+  console.log(chalk.bold.cyan('┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛'));
+  console.log('\n');
+}
+
+/**
+ * Display loading status
+ */
+export function logLoading(message, progress = null) {
+  const timestamp = chalk.gray(`[${getTimestamp()}]`);
+  const type = chalk.bgCyan.black(' CARREGANDO ');
+  const loadingMsg = chalk.cyan(message);
+  const progressBar = progress !== null ? chalk.yellow(` [${progress}%]`) : '';
+  
+  process.stdout.write(`\r${timestamp} ${type} ${loadingMsg}${progressBar}   `);
+}
+
+/**
+ * Display config info during startup
+ */
+export function logConfigInfo(key, value, status = 'info') {
+  const timestamp = chalk.gray(`[${getTimestamp()}]`);
+  const type = chalk.bgBlue.white(' CONFIG ');
+  const configKey = chalk.blue.bold(`${key}:`);
+  
+  let coloredValue;
+  switch (status) {
+    case 'success':
+      coloredValue = chalk.green(value);
+      break;
+    case 'warning':
+      coloredValue = chalk.yellow(value);
+      break;
+    case 'error':
+      coloredValue = chalk.red(value);
+      break;
+    default:
+      coloredValue = chalk.white(value);
+  }
+  
+  console.log(`${timestamp} ${type} ${configKey} ${coloredValue}`);
+}
+
+/**
+ * Display startup section header
+ */
+export function logSection(title) {
+  console.log('\n' + chalk.bold.cyan(`┌─── ${title} ───┐`));
+}
+
+/**
+ * Display startup section footer
+ */
+export function logSectionEnd() {
+  console.log(chalk.bold.cyan(`└${'─'.repeat(50)}┘`) + '\n');
+}
+
+/**
+ * Display startup statistics
+ */
+export function logStats(stats) {
+  logSection('📊 ESTATÍSTICAS DO BOT');
+  
+  Object.entries(stats).forEach(([key, value]) => {
+    const label = chalk.gray(`  ${key}:`);
+    const val = chalk.cyan.bold(value);
+    console.log(`${label} ${val}`);
+  });
+  
+  logSectionEnd();
+}
+
+/**
+ * Display ready message
+ */
+export function logReady(botName, ownerNumber, prefix) {
+  console.log('\n');
+  logSeparator();
+  console.log(chalk.bold.green('🔥 ') + chalk.bold.white('BOT PRONTO E OPERACIONAL!') + chalk.bold.green(' 🔥'));
+  logSeparator();
+  console.log(chalk.cyan('  Bot:') + chalk.white(` ${botName}`));
+  console.log(chalk.cyan('  Dono:') + chalk.white(` ${ownerNumber}`));
+  console.log(chalk.cyan('  Prefixo:') + chalk.white(` ${prefix}`));
+  logSeparator();
+  console.log(chalk.gray('  Aguardando mensagens...'));
+  console.log('\n');
 }
 
 export default {
@@ -209,5 +299,11 @@ export default {
   logCooldown,
   logBlacklist,
   logSeparator,
-  logBanner
+  logBanner,
+  logLoading,
+  logConfigInfo,
+  logSection,
+  logSectionEnd,
+  logStats,
+  logReady
 };
