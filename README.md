@@ -10,17 +10,22 @@ Bot do WhatsApp temático do **Tanjiro Kamado** de *Demon Slayer (Kimetsu no Yai
 
 ### 🔥 Respiração do Sol - Funcionalidades Principais
 
-- **📥 Downloads Automáticos**: TikTok, Instagram, YouTube, Pinterest
-- **👑 Administração de Grupo**: Ban/kick, promote/demote, antilink, antispam, antiporn
-- **🎮 Entretenimento**: Jogos (jogo da velha, forca, quiz), rankings aleatórios, ship
-- **🛠️ Ferramentas**: Stickers, tradução, busca de imagens, encurtador de links
-- **🤖 IA & Automação**: ChatGPT, geração de imagens, resumos automáticos
+- **📥 Downloads Automáticos**: YouTube (play, playvid, ytshorts), TikTok, Instagram, Spotify, SoundCloud, Kwai, Threads, MediaFire, Google Drive
+- **👑 Administração de Grupo**: Ban/kick, add, promote/demote, antilink, antispam, welcome messages, totag, link generator
+- **🎮 Entretenimento**: Jogos (jogo da velha, forca, quiz), medidores aleatórios (gay, gado, ship)
+- **🎨 Figurinhas**: Criação avançada (ttp, attp, sticker, toimg, qc, brat, rename)
+- **🔍 Pesquisas**: 25+ comandos (pensador, nasa, clima, movie, imdb, lyrics, wikipedia, pinterest, etc.)
+- **🎲 Aleatórios**: 25+ utilidades (gtts, traduzir, emoji, calcular, obesidade, tabela, destrava, encurtadores)
+- **📊 Informativos**: Ping, atividade, rankings, níveis, status, infos do bot
+- **💰 Economia Virtual**: Sistema de moedas (carteira, daily, transferir, apostar, minerar)
+- **🪄 Logos**: Geração de logos personalizadas (fire, neon, shadow, thunder)
+- **💎 Sistema Premium**: Usuários VIP com comandos exclusivos
+- **🤖 IA & Automação**: SimSimi chat, identificação de músicas (Shazam)
 - **💾 Sistema de Banco de Dados**: Persistência JSON com backups automáticos
-- **📊 Sistema de Níveis**: XP e ranking de membros
-- **💰 Economia Virtual**: Sistema de moedas e transações
 - **🛡️ Anti-Delete**: Cache de mensagens deletadas
 - **🔄 Reconexão Automática**: Com backoff exponencial
 - **⏱️ Rate Limiting**: Anti-spam e cooldowns configuráveis
+- **🎨 Console Melhorado**: Logs coloridos e organizados com separadores visuais
 
 ### 🌸 Tema Tanjiro
 
@@ -86,58 +91,297 @@ npm run config:install  # Instalação inicial completa
 npm update         # Atualiza dependências
 ```
 
-### Bot Commands (Prefixo padrão: `!`)
+### 🗡️ Comandos do Bot (Prefixo padrão: `!`)
 
-#### 🌸 Menu Principal
-- `!menu` - Exibe menu principal
-- `!ajuda <comando>` - Ajuda sobre comando específico
+O bot possui **mais de 100 comandos** organizados em categorias. Use `!menu` para ver todas as opções.
 
-#### 📥 Downloads
-- `!play <nome/url>` - Download de música do YouTube
-- `!video <url>` - Download de vídeo do YouTube
-- `!tiktok <url>` - Download sem marca d'água
-- `!instagram <url>` - Posts/reels/stories do Instagram
-- `!pinterest <termo>` - Buscar imagens
+#### 📋 Menus Principais
 
-#### 👑 Administração (Requer admin)
-- `!ban @user` - Banir membro
-- `!kick @user` - Remover membro
-- `!add <número>` - Adicionar membro
-- `!promover @user` - Promover a admin
-- `!rebaixar @user` - Rebaixar de admin
-- `!antilink <on/off>` - Ativar/desativar antilink
-- `!antispam <on/off>` - Ativar/desativar antispam
-- `!welcome <on/off>` - Mensagens de boas-vindas
-- `!addmod @user` - Adicionar moderador virtual
-- `!warn @user` - Aplicar aviso
+- `!menu` - Menu principal com todas as categorias
+- `!menudono` - Comandos exclusivos do dono
+- `!menuadm` - Comandos de administração
+- `!menupremium` - Comandos para usuários premium
+- `!menudownloads` - Downloads de múltiplas plataformas
+- `!figurinhas` - Criação de stickers personalizados
+- `!pesquisas` - Pesquisas e buscas
+- `!aleatorios` - Comandos utilitários diversos
+- `!informativos` - Informações do bot e grupo
+- `!brincadeiras` - Jogos e diversão
+- `!menulogos` - Geração de logos
+- `!menucoins` - Sistema de economia virtual
 
-#### 🎮 Diversão
-- `!gay @user` - Medidor gay (aleatório)
-- `!gado @user` - Medidor de gado
-- `!ship @user1 @user2` - Compatibilidade de casal
-- `!jogovelha @user` - Jogo da velha
-- `!forca` - Jogo de forca
-- `!quiz` - Quiz aleatório
+---
 
-#### 🛠️ Ferramentas
-- `!sticker` - Criar sticker (responda imagem/vídeo)
-- `!toimg` - Converter sticker em imagem
-- `!traduzir <lang> <texto>` - Traduzir texto
-- `!encurtar <url>` - Encurtar link
-- `!ping` - Verificar latência
-- `!uptime` - Tempo online do bot
+#### 👑 Comandos do Dono (Menudono)
 
-#### 🤖 IA (Requer API keys)
-- `!gpt <pergunta>` - Chat com GPT
-- `!chat <mensagem>` - Conversar com IA
-- `!imagine <descrição>` - Gerar imagem com IA
+Comandos exclusivos para o proprietário do bot:
 
-#### 🔧 Dono (Apenas owner)
-- `!broadcast <msg>` - Enviar mensagem para todos os grupos
+- `!broadcast <texto>` - Enviar mensagem para todos os grupos
 - `!block @user` - Bloquear usuário
+- `!unblock @user` - Desbloquear usuário
 - `!blacklist add/del @user` - Gerenciar blacklist global
 - `!reiniciar` - Reiniciar o bot
 - `!status` - Ver status do sistema
+- `!listargrupos` - Listar todos os grupos
+- `!entrargrupo <link>` - Entrar em grupo via link
+- `!sairgrupo` - Sair do grupo atual
+- `!premium add/del @user` - Gerenciar usuários premium
+- `!rgtm` - Registrar grupo para transmissões
+- `!tirardatm` - Remover grupo de transmissões
+
+---
+
+#### ⚜️ Comandos de Administração (Menuadm)
+
+Para administradores de grupos:
+
+**Moderação:**
+- `!add <número>` - Adicionar membro ao grupo
+- `!ban @user` / `!kick @user` - Remover membro
+- `!promover @user` - Promover a administrador
+- `!rebaixar @user` - Rebaixar de administrador
+- `!mute @user` - Silenciar usuário
+- `!desmute @user` - Dessilenciar usuário
+
+**Configurações do Grupo:**
+- `!nomegp <nome>` - Alterar nome do grupo
+- `!descgp <texto>` - Alterar descrição
+- `!fotogp` - Alterar foto (marque uma imagem)
+- `!linkgp` - Obter link do grupo
+- `!grupo` - Abrir/fechar grupo
+
+**Proteção:**
+- `!antilink <1/0>` - Ativar/desativar antilink
+- `!antispam <1/0>` - Ativar/desativar antispam
+- `!bemvindo <1/0>` - Ativar/desativar boas-vindas
+
+**Outros:**
+- `!totag` - Marcar todos (responda uma mensagem)
+
+---
+
+#### 📥 Downloads (Menudownloads)
+
+Downloads automáticos de múltiplas plataformas:
+
+**YouTube:**
+- `!play <música>` - Download de áudio do YouTube
+- `!playaudio <música>` - Alternativa de áudio
+- `!playaudio2 <música>` - Outra opção de áudio
+- `!playvid <vídeo>` - Download de vídeo
+- `!playvideo2 <vídeo>` - Alternativa de vídeo
+- `!playdoc <música>` - Download como documento
+- `!playdoc2 <música>` - Alternativa documento
+- `!ytshorts <link>` - Download de YouTube Shorts
+
+**Redes Sociais:**
+- `!tiktok <link>` - Download do TikTok sem marca d'água
+- `!tiktokaudio <link>` - Apenas áudio do TikTok
+- `!instagram <link>` - Posts/Reels/Stories do Instagram
+- `!instaudio <link>` - Apenas áudio do Instagram
+- `!instagram2 <link>` - Método alternativo Instagram
+- `!instaudio2 <link>` - Método alternativo áudio
+- `!threads <link>` - Download do Threads
+- `!kwai <link>` - Download do Kwai
+- `!spotify <link>` - Download do Spotify
+- `!soundcloud <link>` - Download do SoundCloud
+
+**Arquivos:**
+- `!mediafire <link>` - Download do MediaFire
+- `!googledrive <link>` - Download do Google Drive
+- `!gerarlink` - Gerar link de mídia (marque arquivo)
+
+**Outros:**
+- `!shazam` - Identificar música (marque áudio)
+- `!audiomeme` - Criar meme de áudio (marque áudio)
+- `!multidl <link>` - Downloader universal
+
+---
+
+#### 🎨 Figurinhas (Stickers)
+
+Criação e manipulação de stickers:
+
+- `!ttp <texto>` - Texto para sticker estático
+- `!attp <texto>` - Texto para sticker animado
+- `!fsticker` - Foto para sticker (marque foto)
+- `!sticker` - Imagem/vídeo para sticker (marque mídia)
+- `!toimg` - Sticker para imagem (marque sticker)
+- `!rename <nome/autor>` - Renomear sticker
+- `!qc` - Quote para sticker (marque mensagem)
+- `!brat <texto>` - Sticker estilo "brat"
+- `!bratvideo <texto>` - Vídeo estilo "brat"
+
+---
+
+#### 🔍 Pesquisas
+
+Busca em diversas plataformas e serviços:
+
+**Entretenimento:**
+- `!pensador <termo>` - Frases e pensamentos
+- `!movie <filme>` - Informações sobre filmes
+- `!imdb <filme>` - Busca no IMDB
+- `!imdbinfo <id>` - Detalhes do IMDB
+- `!serie <nome>` - Informações sobre séries
+- `!lyrics <música>` - Letras de músicas
+- `!cinema` - Filmes em cartaz
+
+**Informações:**
+- `!nasa <data>` - Foto do dia da NASA
+- `!clima <cidade>` - Previsão do tempo
+- `!dicionario <palavra>` - Dicionário português
+- `!receita <nome>` - Receitas culinárias
+- `!signo <signo>` - Horóscopo do dia
+
+**Compras & Apps:**
+- `!playstore <app>` - Buscar app na Play Store
+- `!aptoide <app>` - Buscar app no Aptoide
+- `!amazon <produto>` - Buscar produto na Amazon
+- `!mercadolivre <produto>` - Buscar no Mercado Livre
+- `!celular <modelo>` - Informações de smartphone
+- `!tekmods <nome>` - Buscar mods de jogos
+
+**Buscadores:**
+- `!googlesrc <termo>` - Busca no Google
+- `!wikipedia <termo>` - Busca na Wikipedia
+- `!pinterest <termo>` - Buscar imagens
+- `!wallpaper <termo>` - Papéis de parede
+- `!ytsearch <música>` - Buscar no YouTube
+- `!scsearch <música>` - Buscar no SoundCloud
+- `!applesearch <música>` - Buscar no Apple Music
+
+**Consultas:**
+- `!scep <cep>` - Consultar CEP
+- `!ddd <código>` - Consultar DDD
+- `!igsh <usuário>` - Info de usuário Instagram
+- `!seemoji <emoji>` - Informações sobre emoji
+
+---
+
+#### 🎲 Aleatórios
+
+Comandos utilitários diversos:
+
+**Conversão & Formatação:**
+- `!gtts <idioma+texto>` - Texto para voz (Google TTS)
+- `!traduzir <texto>` - Traduzir texto
+- `!emoji <emoji/tipo>` - Obter emoji
+- `!emojimix <emoji+emoji>` - Misturar emojis
+- `!fazernick <texto>` - Gerar nick estilizado
+
+**Entretenimento:**
+- `!tagme` - Marcar a si mesmo
+- `!conselhobiblico` - Conselho bíblico aleatório
+- `!cantadas` - Cantada aleatória
+- `!conselhos` - Conselho aleatório
+- `!simi <texto>` - Conversar com SimSimi
+
+**Utilitários:**
+- `!perfil` - Ver seu perfil
+- `!calcular <expressão>` - Calculadora
+- `!morechat <msg1/msg2>` - Comparar mensagens
+- `!obesidade <peso/altura>` - Calcular IMC
+- `!contardias` - Contar dias entre datas
+- `!tabela` - Tabela de símbolos
+- `!destrava` - Mensagem destrava 1
+- `!destrava2` - Mensagem destrava 2
+- `!gerarcpf` - Gerar CPF fictício
+
+**Encurtadores de Link:**
+- `!tinyurl <link>` - Encurtar com TinyURL
+- `!cuttly <link>` - Encurtar com Cutt.ly
+- `!bitly <link>` - Encurtar com Bitly
+
+**Outros:**
+- `!sip <ip>` - Consultar informações de IP
+
+---
+
+#### 📊 Informativos
+
+Informações sobre o bot e o grupo:
+
+**Status do Bot:**
+- `!ping` - Verificar latência do bot
+- `!atividade` - Ver atividade do bot
+- `!dados` - Estatísticas do bot
+- `!idiomas` - Idiomas disponíveis para GTTS
+
+**Ranking & Níveis:**
+- `!rankativo` - Ranking de atividade
+- `!checkativo` - Verificar sua atividade
+- `!ranklevel` - Ranking de níveis
+
+**Informações:**
+- `!infobemvindo` - Info sobre boas-vindas
+- `!infodono` - Informações do dono
+- `!infoaluguel` - Info sobre aluguel do bot
+- `!infopremium` - Info sobre usuários premium
+- `!infocmdprem` - Comandos premium
+- `!consultar_premium` - Consultar status premium
+
+---
+
+#### ⛱️ Brincadeiras
+
+Jogos e diversão:
+
+**Medidores Aleatórios:**
+- `!gay @user` - Medidor gay
+- `!gado @user` - Medidor de gado
+- `!ship @user1 @user2` - Compatibilidade de casal
+
+**Jogos:**
+- `!jogovelha @user` - Jogo da velha
+- `!forca` - Jogo de forca
+- `!quiz` - Quiz de perguntas
+
+---
+
+#### 🪄 Logos
+
+Geração de logos personalizadas:
+
+- `!logofire <texto>` - Logo com efeito de fogo
+- `!logoneon <texto>` - Logo neon
+- `!logoshadow <texto>` - Logo com sombra
+- `!logothunder <texto>` - Logo com raios
+
+---
+
+#### 💰 Sistema de Coins
+
+Economia virtual do bot:
+
+- `!carteira` - Ver sua carteira
+- `!daily` - Receber coins diários
+- `!transferir @user <valor>` - Transferir coins
+- `!apostar <valor>` - Apostar coins
+- `!minerar` - Minerar coins
+
+---
+
+#### 💎 Comandos Premium
+
+Para usuários com acesso premium (consulte `!infopremium`):
+
+- Comandos exclusivos definidos pelo dono
+- Acesso a recursos avançados
+- Prioridade no processamento
+
+---
+
+### 🔑 Atalhos e Aliases
+
+Muitos comandos possuem aliases (nomes alternativos):
+
+- `!menu` = `!menuprincipal`
+- `!ban` = `!kick`
+- `!promover` = `!promote`
+- `!rebaixar` = `!demote`
+- `!figurinhas` = `!menufigurinhas`
+- E muitos outros...
 
 ## ⚙️ Configuração
 
