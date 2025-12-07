@@ -16,7 +16,7 @@ const execPromise = promisify(exec);
  * Convert image to WebP format (512x512) maintaining aspect ratio
  * @param {string} inputPath - Path to input image
  * @param {string} outputPath - Path to output WebP file
- * @returns {Promise<void>}
+ * @returns {Promise<string>} - Path to output file
  */
 export async function imageToWebp(inputPath, outputPath) {
   try {
@@ -69,18 +69,16 @@ export async function imageToWebp(inputPath, outputPath) {
  */
 export async function videoToWebpAnimated(inputPath, outputPath) {
   return new Promise((resolve, reject) => {
-    try {
-      // Check if ffmpeg is available
-      ffmpeg.getAvailableFormats((err) => {
-        if (err) {
-          return reject(new Error('FFmpeg não está instalado ou não foi encontrado no PATH. Instale o FFmpeg para criar stickers animados.'));
-        }
-      });
+    // First check if ffmpeg is available
+    ffmpeg.getAvailableFormats((err) => {
+      if (err) {
+        return reject(new Error('FFmpeg não está instalado ou não foi encontrado no PATH. Instale o FFmpeg para criar stickers animados.'));
+      }
 
-      // Get video metadata first
-      ffmpeg.ffprobe(inputPath, (err, metadata) => {
-        if (err) {
-          return reject(new Error(`Erro ao analisar vídeo: ${err.message}`));
+      // Get video metadata
+      ffmpeg.ffprobe(inputPath, (probeErr, metadata) => {
+        if (probeErr) {
+          return reject(new Error(`Erro ao analisar vídeo: ${probeErr.message}`));
         }
 
         const duration = metadata.format.duration;
@@ -109,17 +107,15 @@ export async function videoToWebpAnimated(inputPath, outputPath) {
             '-s 512:512'
           ])
           .toFormat('webp')
-          .on('error', (err) => {
-            reject(new Error(`Erro ao converter vídeo para WebP animado: ${err.message}`));
+          .on('error', (convertErr) => {
+            reject(new Error(`Erro ao converter vídeo para WebP animado: ${convertErr.message}`));
           })
           .on('end', () => {
             resolve(outputPath);
           })
           .save(outputPath);
       });
-    } catch (error) {
-      reject(new Error(`Erro ao processar vídeo: ${error.message}`));
-    }
+    });
   });
 }
 
