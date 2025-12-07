@@ -96,6 +96,7 @@ process.on('SIGTERM', () => {
 async function start() {
   try {
     colorLogger.logSection('🚀 INICIALIZAÇÃO');
+    colorLogger.logInfo('INIT', 'Verificando ambiente...');
     colorLogger.logConfigInfo('Node.js', process.version, 'success');
     colorLogger.logConfigInfo('Bot Name', config.botName || 'Hinokami Bot', 'info');
     colorLogger.logConfigInfo('Owner', config.ownerNumber || 'Não configurado', 
@@ -103,19 +104,20 @@ async function start() {
     colorLogger.logConfigInfo('Prefix', config.prefix || '!', 'info');
     colorLogger.logSectionEnd();
     
-    colorLogger.logInfo('Sistema', 'Iniciando Hinokami Bot...');
+    colorLogger.logInfo('INIT', 'Iniciando Hinokami Bot...');
     logger.info('🔥 Iniciando Hinokami Bot...');
     
+    colorLogger.logInfo('CONN', 'Conectando ao WhatsApp...');
     const sock = await connectToWhatsApp(handleMessage);
     
-    colorLogger.logSuccess('Sistema', 'Bot inicializado com sucesso!');
+    colorLogger.logSuccess('CONN', 'Bot conectado com sucesso!');
     logger.info('✅ Bot inicializado com sucesso!');
     
     // Display command loading stats
     colorLogger.logSection('📦 COMANDOS CARREGADOS');
-    colorLogger.logInfo('Menus', '13 menus disponíveis');
-    colorLogger.logInfo('Comandos', '+100 comandos integrados');
-    colorLogger.logInfo('Stickers', 'Sistema de figurinhas ativo');
+    colorLogger.logInfo('CMD', '13 menus disponíveis');
+    colorLogger.logInfo('CMD', '+100 comandos integrados');
+    colorLogger.logInfo('CMD', 'Sistema de figurinhas ativo');
     colorLogger.logSectionEnd();
     
     // Display ready message
@@ -129,7 +131,7 @@ async function start() {
     // Heartbeat could be added here for monitoring if needed
     
   } catch (error) {
-    colorLogger.logError('Inicialização', error);
+    colorLogger.logError('ERR', error);
     logger.error('❌ Erro fatal ao iniciar bot:', error);
     console.error('\n💥 Falha ao iniciar o bot!');
     console.error('   Erro:', error.message);
