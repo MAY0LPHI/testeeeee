@@ -1,7 +1,11 @@
 import { logger } from '../connect.js';
-import { groupDB, configDB } from '../utils/database.js';
+import { groupDB, configDB, userDB } from '../utils/database.js';
 import { normalizeJid, isValidUrl, downloadFile } from '../utils/helpers.js';
 import * as menuHandlers from './menuHandlers.js';
+import * as stickerHandlers from './stickers/stickerHandler.js';
+import * as searchHandlers from './searches/searchHandlers.js';
+import * as aleatoriosHandlers from './aleatorios/aleatoriosHandlers.js';
+import * as informativosHandlers from './informativos/informativosHandlers.js';
 
 /**
  * Exporta todos os handlers de comandos do Hinokami Bot
@@ -77,11 +81,55 @@ export async function commandHandler(ctx) {
     gado: { handler: handleGado },
     ship: { handler: handleShip },
 
-    // Tools (stubs)
-    sticker: { handler: handleSticker },
-    toimg: { handler: handleToImg },
+    // Sticker commands
+    sticker: { handler: stickerHandlers.handleSticker },
+    s: { handler: stickerHandlers.handleSticker },
+    fsticker: { handler: stickerHandlers.handleSticker },
+    figurinha: { handler: stickerHandlers.handleSticker },
+    toimg: { handler: stickerHandlers.handleToImg },
     togif: { handler: handleToGif },
-    traduzir: { handler: handleTranslate, requireArgs: true },
+    
+    // Search commands
+    googlesrc: { handler: searchHandlers.handleGoogleSearch, requireArgs: true },
+    wikipedia: { handler: searchHandlers.handleWikipedia, requireArgs: true },
+    scep: { handler: searchHandlers.handleCEP, requireArgs: true },
+    ddd: { handler: searchHandlers.handleDDD, requireArgs: true },
+    pensador: { handler: searchHandlers.handlePensador, requireArgs: true },
+    nasa: { handler: searchHandlers.handleNasa },
+    clima: { handler: searchHandlers.handleClima, requireArgs: true },
+    movie: { handler: searchHandlers.handleMovie, requireArgs: true },
+    playstore: { handler: searchHandlers.handlePlayStore, requireArgs: true },
+    
+    // Aleatorios commands
+    traduzir: { handler: aleatoriosHandlers.handleTraduzir, requireArgs: true },
+    calcular: { handler: aleatoriosHandlers.handleCalcular, requireArgs: true },
+    geracpf: { handler: aleatoriosHandlers.handleGerarCPF },
+    obesidade: { handler: aleatoriosHandlers.handleObesidade },
+    tinyurl: { handler: aleatoriosHandlers.handleTinyURL, requireArgs: true },
+    destrava: { handler: aleatoriosHandlers.handleDestrava },
+    destrava2: { handler: aleatoriosHandlers.handleDestrava },
+    gtts: { handler: aleatoriosHandlers.handleGTTS },
+    emoji: { handler: aleatoriosHandlers.handleEmoji },
+    emojimix: { handler: aleatoriosHandlers.handleEmojiMix },
+    tabela: { handler: aleatoriosHandlers.handleTabela },
+    simi: { handler: aleatoriosHandlers.handleSimi },
+    conselhos: { handler: aleatoriosHandlers.handleConselhos },
+    cantadas: { handler: aleatoriosHandlers.handleCantadas },
+    
+    // Informativos commands
+    ping: { handler: informativosHandlers.handlePing },
+    dados: { handler: informativosHandlers.handleDados },
+    atividade: { handler: informativosHandlers.handleAtividade },
+    idiomas: { handler: informativosHandlers.handleIdiomas },
+    infodono: { handler: informativosHandlers.handleInfoDono },
+    infobemvindo: { handler: informativosHandlers.handleInfoBemvindo },
+    infoaluguel: { handler: informativosHandlers.handleInfoAluguel },
+    infopremium: { handler: informativosHandlers.handleInfoPremium },
+    consultar_premium: { handler: informativosHandlers.handleConsultarPremium },
+    rankativo: { handler: informativosHandlers.handleRankAtivo },
+    checkativo: { handler: informativosHandlers.handleCheckAtivo },
+    ranklevel: { handler: informativosHandlers.handleRankLevel },
+    infocmdprem: { handler: informativosHandlers.handleInfoCmdPrem },
 
     // AI (stubs)
     gpt: { handler: handleGPT, requireArgs: true },
@@ -444,35 +492,11 @@ async function handleShip(ctx) {
 
 // ========== TOOLS COMMANDS (STUBS) ==========
 
-async function handleSticker(ctx) {
-  await sendReply(ctx,
-    `🎨 *Criar Sticker*\n\n` +
-    `⚠️ TODO: Implementar conversão de imagem/vídeo para sticker\n\n` +
-    `Responda uma imagem ou vídeo com este comando.`
-  );
-}
-
-async function handleToImg(ctx) {
-  await sendReply(ctx,
-    `🖼️ *Sticker para Imagem*\n\n` +
-    `⚠️ TODO: Implementar conversão de sticker para imagem\n\n` +
-    `Responda um sticker com este comando.`
-  );
-}
-
 async function handleToGif(ctx) {
   await sendReply(ctx,
     `🎞️ *Sticker para GIF*\n\n` +
     `⚠️ TODO: Implementar conversão de sticker animado para GIF\n\n` +
     `Responda um sticker animado com este comando.`
-  );
-}
-
-async function handleTranslate(ctx) {
-  await sendReply(ctx,
-    `🌐 *Tradução*\n\n` +
-    `⚠️ TODO: Implementar API de tradução\n\n` +
-    `Uso: !traduzir pt <texto>`
   );
 }
 
