@@ -22,6 +22,12 @@
     "maxCommandsPerMinute": 10,
     "messageQueueSize": 100
   },
+  "sticker": {
+    "defaultPack": "YURI BOT",
+    "defaultAuthor": "MAY0LPHI",
+    "maxVideoSeconds": 10,
+    "maxFileSizeMB": 5
+  },
   "theme": {
     "primaryColor": "🔥",
     "secondaryColor": "🗡️",

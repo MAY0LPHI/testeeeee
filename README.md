@@ -40,6 +40,38 @@ Todas as mensagens, menus e interações são temáticas do Tanjiro, incluindo:
 - **Node.js**: 20.0.0 ou superior
 - **NPM**: Instalado com Node.js
 - **WhatsApp**: Conta válida para autenticação
+- **FFmpeg**: Necessário para criação de stickers animados
+
+### Instalação do FFmpeg
+
+O FFmpeg é essencial para funcionalidades de vídeo e stickers animados.
+
+#### Linux (Ubuntu/Debian)
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+#### Linux (Fedora)
+```bash
+sudo dnf install ffmpeg
+```
+
+#### macOS (com Homebrew)
+```bash
+brew install ffmpeg
+```
+
+#### Windows
+1. Baixe o FFmpeg de [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
+2. Extraia o arquivo baixado
+3. Adicione a pasta `bin` ao PATH do sistema
+4. Reinicie o terminal/cmd
+
+**Verificar instalação:**
+```bash
+ffmpeg -version
+```
 
 ## 🚀 Instalação
 
@@ -202,15 +234,43 @@ Downloads automáticos de múltiplas plataformas:
 
 Criação e manipulação de stickers:
 
+**Criação de Stickers:**
 - `!ttp <texto>` - Texto para sticker estático
 - `!attp <texto>` - Texto para sticker animado
 - `!fsticker` - Foto para sticker (marque foto)
 - `!sticker` - Imagem/vídeo para sticker (marque mídia)
+  - **Imagens:** Redimensionadas automaticamente para 512x512
+  - **Vídeos:** Máximo 10 segundos, convertidos para WebP animado
+  - **Limite de tamanho:** 5 MB
+  - **Metadata customizada:** !sticker [pack] [autor] (opcional)
+
+**Conversão:**
 - `!toimg` - Sticker para imagem (marque sticker)
-- `!rename <nome/autor>` - Renomear sticker
+
+**Gerenciamento:**
+- `!rename <nome/autor>` - Renomear sticker (marque sticker ou imagem)
 - `!qc` - Quote para sticker (marque mensagem)
 - `!brat <texto>` - Sticker estilo "brat"
 - `!bratvideo <texto>` - Vídeo estilo "brat"
+
+**💡 Exemplos de uso:**
+```
+1. Criar sticker de imagem:
+   - Envie uma imagem
+   - Digite: !sticker
+
+2. Criar sticker de vídeo:
+   - Marque um vídeo curto (máx. 10s)
+   - Digite: !sticker
+
+3. Customizar metadata:
+   - Marque uma imagem
+   - Digite: !sticker MeuPack MeuNome
+
+4. Converter sticker em imagem:
+   - Marque um sticker
+   - Digite: !toimg
+```
 
 ---
 

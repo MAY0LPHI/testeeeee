@@ -2,6 +2,16 @@ import { logger } from '../connect.js';
 import { groupDB, configDB } from '../utils/database.js';
 import { normalizeJid, isValidUrl, downloadFile } from '../utils/helpers.js';
 import * as menuHandlers from './menuHandlers.js';
+import * as stickerCommands from './commands/stickerCommands.js';
+import * as randomCommands from './commands/randomCommands.js';
+import * as downloadCommands from './commands/downloadCommands.js';
+import * as searchCommands from './commands/searchCommands.js';
+import * as infoCommands from './commands/infoCommands.js';
+import * as funCommands from './commands/funCommands.js';
+import * as logoCommands from './commands/logoCommands.js';
+import * as coinsCommands from './commands/coinsCommands.js';
+import * as ownerCommands from './commands/ownerCommands.js';
+import * as adminCommands from './commands/adminCommands.js';
 
 /**
  * Exporta todos os handlers de comandos do Hinokami Bot
@@ -44,6 +54,7 @@ export async function commandHandler(ctx) {
     menulogo: { handler: menuHandlers.handleMenuLogos },
     menucoins: { handler: menuHandlers.handleMenuCoins },
     modocoins: { handler: menuHandlers.handleMenuCoins },
+    efeitosimg: { handler: menuHandlers.handleMenuFigurinhas },
     
     // Admin commands
     ban: { handler: handleBan, requireAdmin: true, requireGroup: true },
@@ -63,29 +74,142 @@ export async function commandHandler(ctx) {
     listmods: { handler: handleListMods, requireGroup: true },
     warn: { handler: handleWarn, requireAdmin: true, requireGroup: true },
     unwarn: { handler: handleUnwarn, requireAdmin: true, requireGroup: true },
+    nomegp: { handler: adminCommands.handleNomegp, requireAdmin: true, requireGroup: true },
+    descgp: { handler: adminCommands.handleDescgp, requireAdmin: true, requireGroup: true },
+    linkgp: { handler: adminCommands.handleLinkgp, requireAdmin: true, requireGroup: true },
+    grupo: { handler: adminCommands.handleGrupo, requireAdmin: true, requireGroup: true },
+    totag: { handler: adminCommands.handleTotag, requireAdmin: true, requireGroup: true },
+    desmute: { handler: adminCommands.handleDesmute, requireAdmin: true, requireGroup: true },
+    fotogp: { handler: adminCommands.handleFotogp, requireAdmin: true, requireGroup: true },
+    bemvindo: { handler: adminCommands.handleBemvindo, requireAdmin: true, requireGroup: true },
 
-    // Downloads (stubs)
-    play: { handler: handlePlay, requireArgs: true },
-    video: { handler: handleVideo, requireArgs: true },
-    tiktok: { handler: handleTikTok, requireArgs: true },
-    instagram: { handler: handleInstagram, requireArgs: true },
-    pinterest: { handler: handlePinterest, requireArgs: true },
-    audio: { handler: handleAudio, requireArgs: true },
+    // Sticker commands
+    sticker: { handler: stickerCommands.handleSticker },
+    fsticker: { handler: stickerCommands.handleFsticker },
+    toimg: { handler: stickerCommands.handleToImg },
+    ttp: { handler: stickerCommands.handleTtp, requireArgs: true },
+    attp: { handler: stickerCommands.handleAttp, requireArgs: true },
+    rename: { handler: stickerCommands.handleRename, requireArgs: true },
+    qc: { handler: stickerCommands.handleQc },
+    brat: { handler: stickerCommands.handleBrat, requireArgs: true },
+    bratvideo: { handler: stickerCommands.handleBratvideo, requireArgs: true },
 
-    // Fun commands (stubs)
+    // Download commands
+    play: { handler: downloadCommands.handlePlay, requireArgs: true },
+    playaudio: { handler: downloadCommands.handlePlayaudio, requireArgs: true },
+    playaudio2: { handler: downloadCommands.handlePlayaudio2, requireArgs: true },
+    playvid: { handler: downloadCommands.handlePlayvid, requireArgs: true },
+    playvideo2: { handler: downloadCommands.handlePlayvideo2, requireArgs: true },
+    playdoc: { handler: downloadCommands.handlePlaydoc, requireArgs: true },
+    playdoc2: { handler: downloadCommands.handlePlaydoc2, requireArgs: true },
+    ytshorts: { handler: downloadCommands.handleYtshorts, requireArgs: true },
+    shazam: { handler: downloadCommands.handleShazam },
+    audiomeme: { handler: downloadCommands.handleAudiomeme },
+    spotify: { handler: downloadCommands.handleSpotify, requireArgs: true },
+    tiktok: { handler: downloadCommands.handleTiktok, requireArgs: true },
+    tiktokaudio: { handler: downloadCommands.handleTiktokaudio, requireArgs: true },
+    instagram: { handler: downloadCommands.handleInstagram, requireArgs: true },
+    instaudio: { handler: downloadCommands.handleInstaudio, requireArgs: true },
+    instagram2: { handler: downloadCommands.handleInstagram2, requireArgs: true },
+    instaudio2: { handler: downloadCommands.handleInstaudio2, requireArgs: true },
+    threads: { handler: downloadCommands.handleThreads, requireArgs: true },
+    kwai: { handler: downloadCommands.handleKwai, requireArgs: true },
+    multidl: { handler: downloadCommands.handleMultidl, requireArgs: true },
+    soundcloud: { handler: downloadCommands.handleSoundcloud, requireArgs: true },
+    mediafire: { handler: downloadCommands.handleMediafire, requireArgs: true },
+    googledrive: { handler: downloadCommands.handleGoogledrive, requireArgs: true },
+    gerarlink: { handler: downloadCommands.handleGerarlink },
+
+    // Search commands
+    pensador: { handler: searchCommands.handlePensador, requireArgs: true },
+    nasa: { handler: searchCommands.handleNasa },
+    clima: { handler: searchCommands.handleClima, requireArgs: true },
+    movie: { handler: searchCommands.handleMovie, requireArgs: true },
+    imdb: { handler: searchCommands.handleImdb, requireArgs: true },
+    imdbinfo: { handler: searchCommands.handleImdbinfo, requireArgs: true },
+    serie: { handler: searchCommands.handleSerie, requireArgs: true },
+    lyrics: { handler: searchCommands.handleLyrics, requireArgs: true },
+    dicionario: { handler: searchCommands.handleDicionario, requireArgs: true },
+    playstore: { handler: searchCommands.handlePlaystore, requireArgs: true },
+    aptoide: { handler: searchCommands.handleAptoide, requireArgs: true },
+    receita: { handler: searchCommands.handleReceita, requireArgs: true },
+    signo: { handler: searchCommands.handleSigno, requireArgs: true },
+    amazon: { handler: searchCommands.handleAmazon, requireArgs: true },
+    googlesrc: { handler: searchCommands.handleGooglesrc, requireArgs: true },
+    wikipedia: { handler: searchCommands.handleWikipedia, requireArgs: true },
+    pinterest: { handler: searchCommands.handlePinterest, requireArgs: true },
+    wallpaper: { handler: searchCommands.handleWallpaper, requireArgs: true },
+    ytsearch: { handler: searchCommands.handleYtsearch, requireArgs: true },
+    scsearch: { handler: searchCommands.handleScsearch, requireArgs: true },
+    applesearch: { handler: searchCommands.handleApplesearch, requireArgs: true },
+    celular: { handler: searchCommands.handleCelular, requireArgs: true },
+    seemoji: { handler: searchCommands.handleSeemoji, requireArgs: true },
+    scep: { handler: searchCommands.handleScep, requireArgs: true },
+    igsh: { handler: searchCommands.handleIgsh, requireArgs: true },
+    tekmods: { handler: searchCommands.handleTekmods, requireArgs: true },
+    mercadolivre: { handler: searchCommands.handleMercadolivre, requireArgs: true },
+    cinema: { handler: searchCommands.handleCinema },
+
+    // Random/utility commands
+    gtts: { handler: randomCommands.handleGtts, requireArgs: true },
+    tagme: { handler: randomCommands.handleTagme },
+    emoji: { handler: randomCommands.handleEmoji, requireArgs: true },
+    emojimix: { handler: randomCommands.handleEmojimix, requireArgs: true },
+    tabela: { handler: randomCommands.handleTabela },
+    conselhobiblico: { handler: randomCommands.handleConselhobiblico },
+    cantadas: { handler: randomCommands.handleCantadas },
+    conselhos: { handler: randomCommands.handleConselhos },
+    simi: { handler: randomCommands.handleSimi, requireArgs: true },
+    perfil: { handler: randomCommands.handlePerfil },
+    calcular: { handler: randomCommands.handleCalcular, requireArgs: true },
+    obesidade: { handler: randomCommands.handleObesidade, requireArgs: true },
+    traduzir: { handler: randomCommands.handleTraduzir, requireArgs: true },
+    ddd: { handler: randomCommands.handleDDD, requireArgs: true },
+    destrava: { handler: randomCommands.handleDestrava },
+    destrava2: { handler: randomCommands.handleDestrava2 },
+    gerarcpf: { handler: randomCommands.handleGeracpf },
+    tinyurl: { handler: randomCommands.handleTinyurl, requireArgs: true },
+    cuttly: { handler: randomCommands.handleCuttly, requireArgs: true },
+    bitly: { handler: randomCommands.handleBitly, requireArgs: true },
+    sip: { handler: randomCommands.handleSip, requireArgs: true },
+    morechat: { handler: randomCommands.handleMorechat, requireArgs: true },
+    contardias: { handler: randomCommands.handleContardias },
+    fazernick: { handler: randomCommands.handleFazernick, requireArgs: true },
+
+    // Info commands
+    atividade: { handler: infoCommands.handleAtividade },
+    rankativo: { handler: infoCommands.handleRankativo },
+    checkativo: { handler: infoCommands.handleCheckativo },
+    ranklevel: { handler: infoCommands.handleRanklevel },
+    consultar_premium: { handler: infoCommands.handleConsultar_premium },
+    dados: { handler: infoCommands.handleDados },
+    infobemvindo: { handler: infoCommands.handleInfobemvindo },
+    idiomas: { handler: infoCommands.handleIdiomas },
+    infodono: { handler: infoCommands.handleInfodono },
+    infoaluguel: { handler: infoCommands.handleInfoaluguel },
+    infocmdprem: { handler: infoCommands.handleInfocmdprem },
+    infopremium: { handler: infoCommands.handleInfopremium },
+
+    // Fun/game commands
     gay: { handler: handleGay },
     gado: { handler: handleGado },
     ship: { handler: handleShip },
+    jogovelha: { handler: funCommands.handleJogovelha },
+    forca: { handler: funCommands.handleForca },
+    quiz: { handler: funCommands.handleQuiz },
 
-    // Tools (stubs)
-    sticker: { handler: handleSticker },
-    toimg: { handler: handleToImg },
-    togif: { handler: handleToGif },
-    traduzir: { handler: handleTranslate, requireArgs: true },
+    // Logo commands
+    logofire: { handler: logoCommands.handleLogofire, requireArgs: true },
+    logoneon: { handler: logoCommands.handleLogoneon, requireArgs: true },
+    logoshadow: { handler: logoCommands.handleLogoshadow, requireArgs: true },
+    logothunder: { handler: logoCommands.handleLogothunder, requireArgs: true },
 
-    // AI (stubs)
-    gpt: { handler: handleGPT, requireArgs: true },
-    chat: { handler: handleChat, requireArgs: true },
+    // Economy/coins commands
+    carteira: { handler: coinsCommands.handleCarteira },
+    daily: { handler: coinsCommands.handleDaily },
+    transferir: { handler: coinsCommands.handleTransferir, requireArgs: true },
+    apostar: { handler: coinsCommands.handleApostar, requireArgs: true },
+    minerar: { handler: coinsCommands.handleMinerar },
 
     // Owner commands
     broadcast: { handler: handleBroadcast, requireOwner: true, requireArgs: true },
@@ -94,7 +218,13 @@ export async function commandHandler(ctx) {
     blacklist: { handler: handleBlacklist, requireOwner: true },
     reiniciar: { handler: handleRestart, requireOwner: true },
     restart: { handler: handleRestart, requireOwner: true },
-    status: { handler: handleStatus, requireOwner: true }
+    status: { handler: handleStatus, requireOwner: true },
+    listargrupos: { handler: ownerCommands.handleListargrupos, requireOwner: true },
+    entrargrupo: { handler: ownerCommands.handleEntrargrupo, requireOwner: true },
+    sairgrupo: { handler: ownerCommands.handleSairgrupo, requireOwner: true },
+    rgtm: { handler: ownerCommands.handleRgtm, requireOwner: true },
+    tirardatm: { handler: ownerCommands.handleTirardatm, requireOwner: true },
+    premium: { handler: handleBlacklist, requireOwner: true }
   };
 
   const command = commandMap[commandName];
@@ -347,57 +477,7 @@ async function handleUnwarn(ctx) {
   await sendReply(ctx, `✅ Avisos limpos!`);
 }
 
-// ========== DOWNLOAD COMMANDS (STUBS) ==========
-
-async function handlePlay(ctx) {
-  await sendReply(ctx, 
-    `🎵 *Download de Música*\n\n` +
-    `⚠️ TODO: Implementar integração com API de download do YouTube\n\n` +
-    `Busca: ${ctx.args.join(' ')}`
-  );
-}
-
-async function handleVideo(ctx) {
-  await sendReply(ctx,
-    `🎬 *Download de Vídeo*\n\n` +
-    `⚠️ TODO: Implementar download de vídeo do YouTube\n\n` +
-    `URL: ${ctx.args[0]}`
-  );
-}
-
-async function handleTikTok(ctx) {
-  await sendReply(ctx,
-    `📷 *Download TikTok*\n\n` +
-    `⚠️ TODO: Implementar API de download sem marca d'água\n\n` +
-    `URL: ${ctx.args[0]}`
-  );
-}
-
-async function handleInstagram(ctx) {
-  await sendReply(ctx,
-    `📸 *Download Instagram*\n\n` +
-    `⚠️ TODO: Implementar download de posts/reels/stories\n\n` +
-    `URL: ${ctx.args[0]}`
-  );
-}
-
-async function handlePinterest(ctx) {
-  await sendReply(ctx,
-    `📌 *Busca Pinterest*\n\n` +
-    `⚠️ TODO: Implementar busca de imagens no Pinterest\n\n` +
-    `Termo: ${ctx.args.join(' ')}`
-  );
-}
-
-async function handleAudio(ctx) {
-  await sendReply(ctx,
-    `🔊 *Extração de Áudio*\n\n` +
-    `⚠️ TODO: Implementar extração de áudio com ffmpeg\n\n` +
-    `URL: ${ctx.args[0]}`
-  );
-}
-
-// ========== FUN COMMANDS (STUBS) ==========
+// ========== FUN COMMANDS ==========
 
 async function handleGay(ctx) {
   const { m } = ctx;
@@ -439,58 +519,6 @@ async function handleShip(ctx) {
     `@${mentions[0].split('@')[0]} + @${mentions[1].split('@')[0]}\n\n` +
     `${hearts}\n${percentage}%`,
     { mentions }
-  );
-}
-
-// ========== TOOLS COMMANDS (STUBS) ==========
-
-async function handleSticker(ctx) {
-  await sendReply(ctx,
-    `🎨 *Criar Sticker*\n\n` +
-    `⚠️ TODO: Implementar conversão de imagem/vídeo para sticker\n\n` +
-    `Responda uma imagem ou vídeo com este comando.`
-  );
-}
-
-async function handleToImg(ctx) {
-  await sendReply(ctx,
-    `🖼️ *Sticker para Imagem*\n\n` +
-    `⚠️ TODO: Implementar conversão de sticker para imagem\n\n` +
-    `Responda um sticker com este comando.`
-  );
-}
-
-async function handleToGif(ctx) {
-  await sendReply(ctx,
-    `🎞️ *Sticker para GIF*\n\n` +
-    `⚠️ TODO: Implementar conversão de sticker animado para GIF\n\n` +
-    `Responda um sticker animado com este comando.`
-  );
-}
-
-async function handleTranslate(ctx) {
-  await sendReply(ctx,
-    `🌐 *Tradução*\n\n` +
-    `⚠️ TODO: Implementar API de tradução\n\n` +
-    `Uso: !traduzir pt <texto>`
-  );
-}
-
-// ========== AI COMMANDS (STUBS) ==========
-
-async function handleGPT(ctx) {
-  await sendReply(ctx,
-    `🤖 *ChatGPT*\n\n` +
-    `⚠️ TODO: Implementar integração com OpenAI API\n\n` +
-    `Pergunta: ${ctx.args.join(' ')}`
-  );
-}
-
-async function handleChat(ctx) {
-  await sendReply(ctx,
-    `💬 *Chat IA*\n\n` +
-    `⚠️ TODO: Implementar chat bot com IA\n\n` +
-    `Mensagem: ${ctx.args.join(' ')}`
   );
 }
 
